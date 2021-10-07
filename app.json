@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "hiwave-react-native",
+    "slug": "hiwave-react-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "hiwave-react-native"
+}

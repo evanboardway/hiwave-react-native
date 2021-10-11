@@ -1,7 +1,20 @@
 import { createStore } from 'redux';
-import { reducer } from './reducers';
+import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE } from '../helpers/enums'
 
-const store = createStore(reducer)
+const initialState = {
+    wsConnectionState: WSCONNECTING
+}
+
+const rootReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case UPDATE_WSCONNECTIONSTATE:
+            return { ...state, wsConnectionState: action.payload }
+        default:
+            return state
+    }
+}
+
+const store = createStore(rootReducer)
 
 export { store }
 

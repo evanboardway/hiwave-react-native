@@ -1,5 +1,6 @@
 import React, { createContext } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED } from '../helpers/enums'
 
 const WebSocketContext = createContext(null)
 
@@ -10,6 +11,41 @@ export default ({ children }) => {
     let socketWrapper;
 
     const dispatch = useDispatch();
+
+    const wsConnect = () => {
+        socket = new WebSocket("ws://localhost:5000/websocket")
+
+        socket.onopen = (e) => {
+            dispatch({
+                type: UPDATE_WSCONNECTIONSTATE,
+                payload: WSCONNECTED
+            })
+        }
+        socket.onmessage = (e) => {
+            console.log("MESSAGE")
+            console.log(e)
+        }
+        socket.onerror = (e) => {
+            dispatch({
+                type: UPDATE_WSCONNECTIONSTATE,
+                payload: WSFAILED
+            })
+            socket.close()
+            sleep(pingWait)
+            // wsConnect()
+        }
+        socket.onclose = (e) => {
+            dispatch({
+                type: UPDATE_WSCONNECTIONSTATE,
+                payload: WSFAILED
+            })
+            console.log("CLOSE")
+            // wsConnect()
+        }
+
+
+        return socket
+    }
 
     const sendMessage = (type, data) => {
         const raw = {
@@ -22,28 +58,12 @@ export default ({ children }) => {
     }
 
     if (!socket) {
-        socket = new WebSocket("ws://localhost:5000/websocket")
-        
-        socket.onopen = (e) => {
-            console.log("OPEN")
-            sendMessage("Message", "TESTING")
-        }
-        socket.onmessage = (e) => {
-            console.log("MESSAGE")
-            console.log(e)
-        }
-        socket.onerror = (e) => {
-            console.log("ERROR")
-        }
-        socket.onclose = (e) => {
-            console.log("CLOSE")
-        }
+        socket = wsConnect()
+    }
 
-        socketWrapper = {
-            socket: socket,
-            sendMessage
-        }
-
+    socketWrapper = {
+        socket: socket,
+        sendMessage
     }
 
     return (

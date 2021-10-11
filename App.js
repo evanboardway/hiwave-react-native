@@ -1,13 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Provider } from 'react-redux';
+import { store } from './src/store/store';
+import WebSocketProvider, { WebSocketContext } from './src/services/websocket'
+import HomeWrapper from './src/components/wrapper'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>You wanna seee some real speed</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <WebSocketProvider>
+        <HomeWrapper></HomeWrapper>
+      </WebSocketProvider>
+    </Provider>
   );
 }
 
@@ -19,3 +23,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+// npx react-native run-ios --simulator

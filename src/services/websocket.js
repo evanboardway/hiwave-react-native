@@ -31,16 +31,21 @@ export default ({ children }) => {
                 payload: WSFAILED
             })
             socket.close()
-            sleep(pingWait)
-            // wsConnect()
         }
         socket.onclose = (e) => {
             dispatch({
                 type: UPDATE_WSCONNECTIONSTATE,
-                payload: WSFAILED
+                payload: WSCONNECTING
             })
-            console.log("CLOSE")
-            // wsConnect()
+            
+            timer = setInterval(
+                () => {
+                    console.log("timer")
+                    clearInterval(timer)
+                    wsConnect()
+                },
+                4000
+            )
         }
 
 

@@ -3,8 +3,6 @@ import { Button, Text, View } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { WSCONNECTED, WSCONNECTING, WSFAILED } from '../helpers/enums';
 import { WebSocketContext } from '../services/websocket';
-import { store } from '../store/store';
-
 
 const buttonText = (wsConnectionState) => {
     switch (wsConnectionState) {

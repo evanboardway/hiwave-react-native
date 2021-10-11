@@ -11,7 +11,7 @@ export default function App() {
     <Provider store={store}>
       <WebSocketProvider>
         <View style={styles.container}>
-          <MapView></MapView>
+          <MapView name="map"></MapView>
           <ControlsView></ControlsView>
         </View>
       </WebSocketProvider>

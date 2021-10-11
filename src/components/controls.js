@@ -32,7 +32,6 @@ const ControlsView = (props) => {
                 title="Connect"
                 color="#841584"
             />
-            <Text>{buttonText(props.wsConnectionState)}</Text>
         </View>
     );
 }
@@ -43,4 +42,3 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({});
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(ControlsView);
-// export default ControlsView

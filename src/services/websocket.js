@@ -1,7 +1,6 @@
 import React, { Component, createContext } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED } from '../helpers/enums'
-import { store } from '../store/store';
 
 const WebSocketContext = createContext(null)
 

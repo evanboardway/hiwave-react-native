@@ -1,19 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
-const rootReducer = (state = {}, action) => { return state }
-const store = createStore(rootReducer)
+import { store } from './src/store/store';
+import MapView from './src/components/map'
+import ControlsView from './src/components/controls';
+import WebSocketProvider, { WebSocketContext } from './src/services/websocket'
 
 export default function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        <Text>You wanna seee some real speed</Text>
-        <StatusBar style="auto" />
-      </View>
+      <WebSocketProvider>
+        <View style={styles.container}>
+          <MapView></MapView>
+          <ControlsView></ControlsView>
+        </View>
+      </WebSocketProvider>
     </Provider>
   );
 }
@@ -26,14 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-// To connect component to redux.
-// import { connect } from 'react-redux'
-
-// And then calling it with a mapStateToProps or mapDispatchToProps argument, and then passing in the unconnected component:
-
-// const ConnectedLoginGate = connect(state => ({ username: state.auth.username }))(LoginGate)
 
 
 // npx react-native run-ios --simulator

@@ -7,6 +7,7 @@ import ControlsView from './src/components/controls';
 import WebSocketProvider, { WebSocketContext } from './src/services/websocket'
 
 export default function App() {
+
   return (
     <Provider store={store}>
       <WebSocketProvider>

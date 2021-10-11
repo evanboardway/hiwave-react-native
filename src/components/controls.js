@@ -38,8 +38,6 @@ const ControlsView = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log("UPDATE PROP");
-    console.log(state.wsConnectionState)
     return { wsConnectionState: state.wsConnectionState }
 };
 const mapDispatchToProps = dispatch => ({});

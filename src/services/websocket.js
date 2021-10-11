@@ -1,14 +1,16 @@
-import React, { createContext } from 'react';
+import React, { Component, createContext } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED } from '../helpers/enums'
+import { store } from '../store/store';
 
 const WebSocketContext = createContext(null)
 
 export { WebSocketContext }
 
 export default ({ children }) => {
-    let socket;
-    let socketWrapper;
+    let socket
+    let socketWrapper
+    let timer
 
     const dispatch = useDispatch();
 
@@ -16,6 +18,7 @@ export default ({ children }) => {
         socket = new WebSocket("ws://localhost:5000/websocket")
 
         socket.onopen = (e) => {
+            timer = null
             dispatch({
                 type: UPDATE_WSCONNECTIONSTATE,
                 payload: WSCONNECTED
@@ -37,15 +40,6 @@ export default ({ children }) => {
                 type: UPDATE_WSCONNECTIONSTATE,
                 payload: WSCONNECTING
             })
-            
-            timer = setInterval(
-                () => {
-                    console.log("timer")
-                    clearInterval(timer)
-                    wsConnect()
-                },
-                4000
-            )
         }
 
 
@@ -65,6 +59,7 @@ export default ({ children }) => {
     if (!socket) {
         socket = wsConnect()
     }
+
 
     socketWrapper = {
         socket: socket,

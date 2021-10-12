@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { WSCONNECTING, WSFAILED, WSCONNECTED } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
+import { DARK_THEME, OVERLAY_2 } from '../assets/themes';
 
 
 const HomeWrapper = (props) => {
@@ -18,9 +19,14 @@ const HomeWrapper = (props) => {
             </View>)
         default:
             return (
-                <View style={styles.container}>
-                    <MapView></MapView>
-                    <ControlsView></ControlsView>
+                <View style={styles.wrapper}>
+                    <View style={styles.map}>
+                        <MapView></MapView>
+                    </View>
+                    <View style={styles.controls}>
+                        <ControlsView></ControlsView>
+                    </View>
+
                 </View>
             )
 
@@ -30,12 +36,32 @@ const HomeWrapper = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-  });
+    wrapper: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: DARK_THEME,
+        alignItems: 'center',
+    },
+    controls: {
+        flex: 1,
+        backgroundColor: OVERLAY_2,
+        opacity: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
+    },
+    map: {
+        flex: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
+    }
+});
 
 
 

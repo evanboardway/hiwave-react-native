@@ -1,6 +1,8 @@
 import React, { Component, createContext } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED } from '../helpers/enums'
+import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED, WRTC_OFFER_RECEIVED } from '../helpers/enums'
+
+// TODO: MAKE SURE THAT REFRESHING THE REDUX STORE DOESNT REFRESH THE CONNECTION
 
 const WebSocketContext = createContext(null)
 
@@ -9,7 +11,6 @@ export { WebSocketContext }
 export default ({ children }) => {
     let socket
     let socketWrapper
-    let timer
 
     const dispatch = useDispatch();
 
@@ -17,15 +18,24 @@ export default ({ children }) => {
         socket = new WebSocket("ws://localhost:5000/websocket")
 
         socket.onopen = (e) => {
-            timer = null
+            // sendMessage("ping", "pong")
             dispatch({
                 type: UPDATE_WSCONNECTIONSTATE,
                 payload: WSCONNECTED
             })
         }
         socket.onmessage = (e) => {
-            console.log("MESSAGE")
+            message = JSON.parse(e.data)
             console.log(e)
+            switch(message.event) {
+                case "wrtc_offer":
+                    dispatch({ 
+                        type: WRTC_OFFER_RECEIVED,
+                        payload: message.data                       
+                    })
+                case "wrtc_candidate":
+                    console.log("CANDIDATE")
+            }
         }
         socket.onerror = (e) => {
             dispatch({
@@ -46,6 +56,7 @@ export default ({ children }) => {
     }
 
     const sendMessage = (type, data) => {
+        console.log("SENT " + type)
         const raw = {
             event: type,
             data, data

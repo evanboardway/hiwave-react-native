@@ -24,7 +24,7 @@ const HomeWrapper = (props) => {
                         <MapView></MapView>
                     </View>
                     <View style={styles.controls}>
-                        <ControlsView ws={props.ws}></ControlsView>
+                        <ControlsView></ControlsView>
                     </View>
 
                 </View>

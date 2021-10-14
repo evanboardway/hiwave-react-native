@@ -1,14 +1,9 @@
 import React, { Component, createContext } from 'react';
 import { connect } from 'react-redux';
-import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED, WRTC_OFFER_RECEIVED } from '../helpers/enums'
-import HomeWrapper from '../components/wrapper'
+import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WSCONNECTED, WSFAILED, WRTC_OFFER_RECEIVED, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECTION_REQUESTED } from '../helpers/enums'
 
 
-// TODO: Turn this into a stateful component with class notation
-
-// export const WebSocketContext = createContext({})
-
-// export { WebSocketContext }
+export const WebSocketContext = createContext(null)
 
 timeout = 400
 
@@ -84,12 +79,13 @@ class WebSocketWrapper extends React.Component {
         }
         payload = JSON.stringify(raw)
         this.socket.send(payload)
-        // dispatch any updates you need
     }
 
     render() {
         return (
-            <HomeWrapper ws={this.state}></HomeWrapper>
+            <WebSocketContext.Provider value={this.state}>
+                {this.props.children}
+            </WebSocketContext.Provider>
         )
     }
 }
@@ -97,79 +93,3 @@ class WebSocketWrapper extends React.Component {
 const mapDispatchToProps = dispatch => ({})
 const connectComponent = connect(mapDispatchToProps)
 export default connectComponent(WebSocketWrapper)
-
-
-
-// export default ({ children }) => {
-//     let socket
-//     let socketWrapper
-
-//     const dispatch = useDispatch();
-
-    // const wsConnect = () => {
-    //     socket = new WebSocket("ws://localhost:5000/websocket")
-
-    //     socket.onopen = (e) => {
-    //         dispatch({
-    //             type: UPDATE_WSCONNECTIONSTATE,
-    //             payload: WSCONNECTED
-    //         })
-    //     }
-    //     socket.onmessage = (e) => {
-    //         message = JSON.parse(e.data)
-    //         console.log(e)
-    //         switch(message.event) {
-    //             case "wrtc_offer":
-    //                 dispatch({ 
-    //                     type: WRTC_OFFER_RECEIVED,
-    //                     payload: message.data                       
-    //                 })
-    //             case "wrtc_candidate":
-    //                 console.log("CANDIDATE")
-    //         }
-    //     }
-    //     socket.onerror = (e) => {
-    //         dispatch({
-    //             type: UPDATE_WSCONNECTIONSTATE,
-    //             payload: WSFAILED
-    //         })
-    //         socket.close()
-    //     }
-    //     socket.onclose = (e) => {
-    //         dispatch({
-    //             type: UPDATE_WSCONNECTIONSTATE,
-    //             payload: WSCONNECTING
-    //         })
-    //     }
-
-
-    //     return socket
-    // }
-
-    // const sendMessage = (type, data) => {
-    //     console.log("SENT " + type)
-    //     const raw = {
-    //         event: type,
-    //         data, data
-    //     }
-    //     payload = JSON.stringify(raw)
-    //     socket.send(payload)
-    //     // dispatch any updates you need
-    // }
-
-//     if (!socket) {
-//         socket = wsConnect()
-//     }
-
-
-//     socketWrapper = {
-//         socket: socket,
-//         sendMessage
-//     }
-
-    // return (
-    //     < WebSocketContext.Provider value={socketWrapper} >
-    //         {children}
-    //     </WebSocketContext.Provider >
-    // )
-// }

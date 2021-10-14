@@ -3,11 +3,13 @@ import { StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
 import WebSocketProvider, { WebSocketContext } from './src/services/connection'
+import HomeWrapper from './src/components/wrapper'
 
 export default function App() {
   return (
     <Provider store={store}>
       <WebSocketProvider>
+        <HomeWrapper></HomeWrapper>
       </WebSocketProvider>
     </Provider>
   );

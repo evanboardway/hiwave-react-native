@@ -3,30 +3,34 @@ import { Button, Text, View, StyleSheet } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WSCONNECTING, WSFAILED, WRTC_UPDATE_CONNECTION_STATE } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME } from '../assets/themes';
+import { WebSocketContext } from '../services/connection';
 
 
 
 class ControlsView extends React.Component {
-    requestConnection = () => {
-        this.props.ws.send("wrtc_connect")
-        this.props.dispatch({
-            type: WRTC_UPDATE_CONNECTION_STATE,
-            payload: WRTC_CONNECTION_REQUESTED
-        })
-    }
 
     render() {
         return (
-            <View styles={styles.controls}>
-                <View style={styles.connectButton}>
-                    <Button
-                        onPress={this.requestConnection}
-                        title="CONNECT"
-                        color='rgba(255, 255, 255, 0.7)'
-                        disabled={this.props.wsConnectionState == WSCONNECTING ? true : false}
-                    />
-                </View>
-            </View>
+            <WebSocketContext.Consumer>
+                {({ socket, send }) => (
+                    <View styles={styles.controls}>
+                        <View style={styles.connectButton}>
+                            <Button
+                                onPress={() => {
+                                    send("wrtc_connect")
+                                    this.props.dispatch({
+                                        type: WRTC_UPDATE_CONNECTION_STATE,
+                                        payload: WRTC_CONNECTION_REQUESTED
+                                    })
+                                }}
+                                title={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? "..." : "CONNECT"}
+                                color='rgba(255, 255, 255, 0.7)'
+                                disabled={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? true : false}
+                            />
+                        </View>
+                    </View>
+                )}
+            </WebSocketContext.Consumer>
         )
     }
 }
@@ -50,6 +54,5 @@ const mapStateToProps = (state) => {
         wrtcConnectionState: state.wrtcConnectionState,
     }
 };
-// const mapDispatchToProps = dispatch => ({})
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(ControlsView);

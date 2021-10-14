@@ -36,15 +36,12 @@ class WebSocketWrapper extends React.Component {
         }
         socket.onmessage = (e) => {
             message = JSON.parse(e.data)
-            console.log(e)
+            console.log(message.event)
             switch (message.event) {
                 case "wrtc_offer":
-                    this.props.dispatch({
-                        type: WRTC_OFFER_RECEIVED,
-                        payload: message.data
-                    })
+                    
                 case "wrtc_candidate":
-                    console.log("CANDIDATE")
+                    // console.log("CANDIDATE")
             }
         }
         socket.onerror = (e) => {

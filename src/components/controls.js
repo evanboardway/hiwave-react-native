@@ -4,6 +4,7 @@ import { connect, useDispatch } from 'react-redux';
 import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WSCONNECTING, WSFAILED, WRTC_UPDATE_CONNECTION_STATE } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME } from '../assets/themes';
 import { WebSocketContext } from '../services/connection';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 
@@ -40,10 +41,10 @@ const styles = StyleSheet.create({
         backgroundColor: BUTTON_ACCENT,
         margin: 5,
         paddingHorizontal: 20,
-        paddingVertical: 5,
+        paddingVertical: 20,
         borderRadius: 100,
         shadowRadius: 20,
-        shadowOpacity: 0.1
+        shadowOpacity: 0.3
     },
     controls: {}
 })

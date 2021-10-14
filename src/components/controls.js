@@ -1,61 +1,34 @@
 import React, { useContext } from 'react';
 import { Button, Text, View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WSCONNECTING, WSFAILED, WRTC_UPDATE_CONNECTION_STATE } from '../helpers/enums';
-import { WebSocketContext } from '../services/websocket';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME } from '../assets/themes';
 
-const buttonText = (wsConnectionState) => {
-    switch (wsConnectionState) {
-        case WSCONNECTING:
-            return "connecting"
-        case WSCONNECTED:
-            return "connected"
-        case WSFAILED:
-            return "failed"
-        default:
-            return "idk whats happening"
-    }
-}
 
-const renderConnectButton = (props) => {
-    const socket = useContext(WebSocketContext)
 
-    console.log(props.wrtcOffer)
-
-    const requestConnection = () => {
-        socket.sendMessage("wrtc_connect", "")
-        props.dispatch({
+class ControlsView extends React.Component {
+    requestConnection = () => {
+        this.props.ws.send("wrtc_connect")
+        this.props.dispatch({
             type: WRTC_UPDATE_CONNECTION_STATE,
             payload: WRTC_CONNECTION_REQUESTED
         })
     }
 
-    switch (props.wrtcConnectionState) {
-        case WRTC_CONNECTION_REQUESTED:
-            return (<Button
-                onPress={requestConnection}
-                title="..."
-                color='rgba(255, 255, 255, 0.7)'
-                disabled={true}
-            />)
-        default:
-            return (<Button
-                onPress={requestConnection}
-                title="CONNECT"
-                color='rgba(255, 255, 255, 0.7)'
-            />)
-    }
-}
-
-const ControlsView = (props) => {
-    return (
-        <View styles={styles.controls}>
-            <View style={styles.connectButton}>
-                {renderConnectButton(props)}
+    render() {
+        return (
+            <View styles={styles.controls}>
+                <View style={styles.connectButton}>
+                    <Button
+                        onPress={this.requestConnection}
+                        title="CONNECT"
+                        color='rgba(255, 255, 255, 0.7)'
+                        disabled={this.props.wsConnectionState == WSCONNECTING ? true : false}
+                    />
+                </View>
             </View>
-        </View>
-    );
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -75,9 +48,8 @@ const mapStateToProps = (state) => {
     return {
         wsConnectionState: state.wsConnectionState,
         wrtcConnectionState: state.wrtcConnectionState,
-        wrtcOffer: state.wrtcOffer
     }
 };
-// const mapDispatchToProps = dispatch => ({});
+// const mapDispatchToProps = dispatch => ({})
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(ControlsView);

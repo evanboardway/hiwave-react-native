@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { connect } from 'react-redux';
 
-function MapView() {
+const MapView = (props) => {
     
     return (
         <View>
@@ -10,4 +11,8 @@ function MapView() {
     );
 }
 
-export default MapView;
+const mapStateToProps = (state) => {
+    return { location: state.location }
+};
+const connectComponent = connect(mapStateToProps);
+export default connectComponent(MapView);

@@ -3,11 +3,6 @@ import { WSCONNECTED, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILE
 let ws = null
 let timeout = 400
 
-
-isConnected = () => {
-    if (!ws || ws.readyState == WebSocket.CLOSED) this.wsConnect(); //check if websocket instance is closed, if so call `connect` function.
-};
-
 export const websocketMiddleware = store => next => action => {
     const { dispatch } = store;
 

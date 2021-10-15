@@ -1,7 +1,7 @@
 import { WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_WSCONNECTIONSTATE } from "../../helpers/enums"
 
 const initialState = {
-    wsConnectionState: WSCONNECTING
+    wsConnectionState: WSCONNECTING,
 }
 
 export function websocketReducer(state = initialState, action) {

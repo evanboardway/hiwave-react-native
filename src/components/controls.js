@@ -8,32 +8,49 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 
-class ControlsView extends React.Component {
+// class ControlsView extends React.Component {
 
-    render() {
-        return (
-            <WebSocketContext.Consumer>
-                {({ socket, send }) => (
-                    <View styles={styles.controls}>
-                        <View style={styles.connectButton}>
-                            <Button
-                                onPress={() => {
-                                    send("wrtc_connect")
-                                    this.props.dispatch({
-                                        type: WRTC_UPDATE_CONNECTION_STATE,
-                                        payload: WRTC_CONNECTION_REQUESTED
-                                    })
-                                }}
-                                title={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? "..." : "CONNECT"}
-                                color='rgba(255, 255, 255, 0.7)'
-                                disabled={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? true : false}
-                            />
-                        </View>
-                    </View>
-                )}
-            </WebSocketContext.Consumer>
-        )
-    }
+//     render() {
+//         return (
+//             <WebSocketContext.Consumer>
+//                 {({ socket, send }) => (
+//                     <View styles={styles.controls}>
+//                         <View style={styles.connectButton}>
+// <Button
+//     onPress={() => {
+//         send("wrtc_connect")
+//         this.props.dispatch({
+//             type: WRTC_UPDATE_CONNECTION_STATE,
+//             payload: WRTC_CONNECTION_REQUESTED
+//         })
+//     }}
+//     title={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? "..." : "CONNECT"}
+//     color='rgba(255, 255, 255, 0.7)'
+//     disabled={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? true : false}
+// />
+//                         </View>
+//                     </View>
+//                 )}
+//             </WebSocketContext.Consumer>
+//         )
+//     }
+// }
+
+const ControlsView = (props) => {
+    return (
+        <Text>Controls</Text>
+        // <Button
+        //     onPress={() => {
+        //         props.dispatch({
+        //             type: WRTC_UPDATE_CONNECTION_STATE,
+        //             payload: WRTC_CONNECTION_REQUESTED
+        //         })
+        //     }}
+        //     title={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? "..." : "CONNECT"}
+        //     color='rgba(255, 255, 255, 0.7)'
+        //     disabled={this.props.wrtcConnectionState == WRTC_CONNECTION_REQUESTED ? true : false}
+        // />
+    )
 }
 
 const styles = StyleSheet.create({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { WSCONNECTING, WSFAILED, WSCONNECTED } from '../helpers/enums'
+import { WSCONNECTING, WSFAILED, WSCONNECTED, WSCONNECT } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
 import { DARK_THEME, OVERLAY_2 } from '../assets/themes';
@@ -26,7 +26,6 @@ const HomeWrapper = (props) => {
                     <View style={styles.controls}>
                         <ControlsView></ControlsView>
                     </View>
-
                 </View>
             )
 

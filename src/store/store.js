@@ -1,38 +1,26 @@
-import { createStore } from 'redux';
-import { WSCONNECTING, UPDATE_WSCONNECTIONSTATE, WRTC_OFFER_RECEIVED, WRTC_CONNECTION_REQUESTED, WRTC_CONNECTING, WRTC_UPDATE_CONNECTION_STATE } from '../helpers/enums'
+import { createStore, applyMiddleware } from 'redux';
+import { websocketMiddleware } from './middleware/wsMiddleware';
+import { websocketReducer } from './reducers/wsReducer';
 
-const initialState = {
-    wsConnectionState: WSCONNECTING,
-    wrtcConnectionState: "",
-    wrtcOffer: "",
-    wrtcAnswer: ""
-}
-
-const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case UPDATE_WSCONNECTIONSTATE:
-            return { ...state, wsConnectionState: action.payload }
-        case WRTC_OFFER_RECEIVED:
-            return { ...state, wrtcOffer: action.payload}
-        case WRTC_UPDATE_CONNECTION_STATE:
-            return { ...state, wrtcConnectionState: action.payload}
-        default:
-            return state
-    }
-}
-
-const store = createStore(rootReducer)
-
-export { store }
+export const store = createStore(websocketReducer, applyMiddleware(websocketMiddleware))
 
 
-// Gona have something like this:
+// const initialState = {
+//     wsConnectionState: WSCONNECTING,
+//     wrtcConnectionState: "",
+//     wrtcOffer: "",
+//     wrtcAnswer: ""
+// }
 
-// state = {
-//     WSCONNECTIONSTATE: "",
-//     LOCATION: {
-//         lat: 0,
-//         long: 0
+// const rootReducer = (state = initialState, action) => {
+//     switch (action.type) {
+//         case UPDATE_WSCONNECTIONSTATE:
+//             return { ...state, wsConnectionState: action.payload }
+//         case WRTC_OFFER_RECEIVED:
+//             return { ...state, wrtcOffer: action.payload}
+//         case WRTC_UPDATE_CONNECTION_STATE:
+//             return { ...state, wrtcConnectionState: action.payload}
+//         default:
+//             return state
 //     }
-
 // }

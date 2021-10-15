@@ -1,7 +1,9 @@
+export const WSCONNECT = "wsconnect"
 export const WSCONNECTED = "wsconnected"
 export const WSCONNECTING = "wsconnecting"
 export const WSFAILED = "wsfailed"
 export const UPDATE_WSCONNECTIONSTATE = "update_wsconnectionstate"
+export const WS_SEND_MESSAGE = "ws_send_message"
 
 // export const UPDATE_WRTC_CONNECTION_STATE = "update_wrtc_connection_state"
 export const WRTC_UPDATE_CONNECTION_STATE = "wrtc_update_connection_state"

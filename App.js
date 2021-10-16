@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { store } from './src/store/store';
-import WebSocketProvider, { WebSocketContext } from './src/services/connection'
 import HomeWrapper from './src/components/wrapper'
 import { WSCONNECT } from './src/helpers/enums';
 

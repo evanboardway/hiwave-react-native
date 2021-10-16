@@ -1,10 +1,10 @@
 import { WSCONNECTED, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE } from "../../helpers/enums";
 
 let ws = null
-let timeout = 400
+let timeout = 2500
 
 export const websocketMiddleware = store => next => action => {
-    const { dispatch } = store;
+    const { dispatch } = store
 
     let connectionInterval
 

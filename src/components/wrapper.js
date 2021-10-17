@@ -8,7 +8,6 @@ import { DARK_THEME, OVERLAY_2 } from '../assets/themes';
 
 
 const HomeWrapper = (props) => {
-    console.log(props)
     switch (props.wsConnectionState) {
         case WSCONNECTING:
             return (<View style={styles.container}>

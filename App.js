@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { store } from './src/store/store';
-import WebSocketProvider, { WebSocketContext } from './src/services/connection'
+import HomeWrapper from './src/components/wrapper'
+import { WSCONNECT } from './src/helpers/enums';
 
 export default function App() {
+  store.dispatch({
+    type: WSCONNECT
+  })
   return (
     <Provider store={store}>
-      <WebSocketProvider>
-      </WebSocketProvider>
+      <HomeWrapper></HomeWrapper>
     </Provider>
   );
 }

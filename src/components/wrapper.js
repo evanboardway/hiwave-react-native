@@ -68,5 +68,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return { wsConnectionState: state.wsConnectionState }
 };
+const mapDispatchToProps = dispatch => ({});
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(HomeWrapper);

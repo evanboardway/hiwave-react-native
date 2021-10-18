@@ -17,7 +17,7 @@ target 'hiwavereactnative' do
   use_unimodules!
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config["reactNativePath"], :subspecs => ['RCTGeolocation'])
 
   # Uncomment to opt-in to using Flipper
   #

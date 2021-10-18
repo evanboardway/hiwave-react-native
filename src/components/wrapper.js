@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { WSCONNECTING, WSFAILED, WSCONNECTED, WSCONNECT } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
-import { DARK_THEME, OVERLAY_2 } from '../assets/themes';
+import { DARK_THEME, OVERLAY_2,MAPBOX_THEME } from '../assets/themes';
 
 
 const HomeWrapper = (props) => {
@@ -48,14 +48,14 @@ const styles = StyleSheet.create({
     },
     controls: {
         flex: 1,
-        backgroundColor: OVERLAY_2,
+        backgroundColor: MAPBOX_THEME,
         opacity: 1,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%'
     },
     map: {
-        flex: 3,
+        flex: 5,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%'

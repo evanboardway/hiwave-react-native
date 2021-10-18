@@ -18,13 +18,11 @@ export default class Map extends Component {
         <View style={styles.map}>
           <MapboxGL.MapView
             styleURL={"mapbox://styles/tessoro-/ckux4pjtw19fy18n0w3k7xz78"}
-            zoomLevel={16}
-            centerCoordinate={[3.3362400, 6.5790100]}
             showUserLocation={true}
             style={{flex: 1}}>
               <MapboxGL.Camera
-                zoomLevel={16}
-                centerCoordinate={[3.3362400, 6.5790100]}
+                zoomLevel={12}
+                centerCoordinate={[-85.63322067588241, 42.94984942526444]}
               >
               </MapboxGL.Camera>
               <MapboxGL.UserLocation/>

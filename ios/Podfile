@@ -5,6 +5,15 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 
 target 'hiwavereactnative' do
+
+  pre_install do |installer|
+    $RNMBGL.pre_install(installer)
+  end
+
+  post_install do |installer|
+    $RNMBGL.post_install(installer)
+  end
+
   use_unimodules!
   config = use_native_modules!
 

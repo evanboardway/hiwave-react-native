@@ -11,3 +11,7 @@
 ## Sprint report 1
 
 * https://docs.google.com/document/d/1-eDoyYW402RGNmomx9Qcw92P7qabgQXPWmAxmMVBhps/edit?usp=sharing
+
+## Sprint 2 Deck
+
+* https://docs.google.com/presentation/d/1nm3sEUJ9vF_BN6e57iJpqcjiAHhgwqJ5OCHosvgU0xI/edit

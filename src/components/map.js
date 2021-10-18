@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import { connect } from 'react-redux';
+import { REFRESH_LOCATION, UPDATE_LOCATION } from '../helpers/enums';
+
 
 MapboxGL.setAccessToken('pk.eyJ1IjoidGVzc29yby0iLCJhIjoiY2t1b3EzY2d2MGV1ejJ2bzFtbXIxMmdjbCJ9.P-4uyej3lnQVxNs1Tzc-Sw');
 
@@ -12,8 +15,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Map extends Component {
-  render() {
+const Map = (props) => {
     return (
         <View style={styles.map}>
           <MapboxGL.MapView
@@ -21,15 +23,15 @@ export default class Map extends Component {
             showUserLocation={true}
             style={{flex: 1}}>
               <MapboxGL.Camera
-                zoomLevel={12}
-                centerCoordinate={[-85.63322067588241, 42.94984942526444]}
+                zoomLevel={16}
+                followUserLocation={true}
+                centerCoordinate={[props.location.coords.longitude, props.location.coords.latitude]}
               >
               </MapboxGL.Camera>
               <MapboxGL.UserLocation/>
           </MapboxGL.MapView>
         </View>
       );
-  }
 }
 
 
@@ -42,8 +44,8 @@ export default class Map extends Component {
 //     );
 // }
 
-// const mapStateToProps = (state) => {
-//     return { location: state.location }
-// };
-// const connectComponent = connect(mapStateToProps);
-// export default connectComponent(MapView);
+const mapStateToProps = (state) => {
+    return { location: state.currentLocation }
+};
+const connectComponent = connect(mapStateToProps);
+export default connectComponent(Map);

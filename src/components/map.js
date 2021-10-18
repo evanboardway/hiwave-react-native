@@ -1,18 +1,51 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
-const MapView = (props) => {
-    
+MapboxGL.setAccessToken('pk.eyJ1IjoidGVzc29yby0iLCJhIjoiY2t1b3EzY2d2MGV1ejJ2bzFtbXIxMmdjbCJ9.P-4uyej3lnQVxNs1Tzc-Sw');
+
+const styles = StyleSheet.create({
+  map: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  }
+});
+
+export default class Map extends Component {
+  render() {
     return (
-        <View>
-            <Text>Map</Text>
+        <View style={styles.map}>
+          <MapboxGL.MapView
+            styleURL={MapboxGL.StyleURL.Street}
+            zoomLevel={16}
+            centerCoordinate={[3.3362400, 6.5790100]}
+            showUserLocation={true}
+            style={{flex: 1}}>
+              <MapboxGL.Camera
+                zoomLevel={16}
+                centerCoordinate={[3.3362400, 6.5790100]}
+              >
+              </MapboxGL.Camera>
+              <MapboxGL.UserLocation/>
+          </MapboxGL.MapView>
         </View>
-    );
+      );
+  }
 }
 
-const mapStateToProps = (state) => {
-    return { location: state.location }
-};
-const connectComponent = connect(mapStateToProps);
-export default connectComponent(MapView);
+
+// const MapView = (props) => {
+    
+//     return (
+//         <View>
+//             <Text>Map</Text>
+//         </View>
+//     );
+// }
+
+// const mapStateToProps = (state) => {
+//     return { location: state.location }
+// };
+// const connectComponent = connect(mapStateToProps);
+// export default connectComponent(MapView);

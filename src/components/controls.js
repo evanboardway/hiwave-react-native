@@ -24,7 +24,7 @@ const ControlsView = (props) => {
     return (
         <View style={styles.controlsContainer}>
             <View style={styles.secondaryControlsContainer}>
-                <View style={styles.button}>
+                <View style={styles.voxBut}>
                     <Button
                         title={"VOICE"}
                         color='rgba(255, 255, 255, 0.7)'
@@ -36,7 +36,7 @@ const ControlsView = (props) => {
                     />
                 </View>
 
-                <View style={styles.button}>
+                <View style={styles.muteBut}>
                     <Button
                         title={"MUTE"}
                         color='rgba(255, 255, 255, 0.7)'
@@ -54,7 +54,7 @@ const ControlsView = (props) => {
                 </View>
 
             </View>
-            <View style={styles.button}>
+            <View style={styles.conButton}>
                 <Button
                     onPress={() => {
                         if (props.wrtcConnectionState == WRTC_CONNECTED) {
@@ -77,10 +77,37 @@ const ControlsView = (props) => {
 }
 
 const styles = StyleSheet.create({
-    button: {
+    voxBut: {
         backgroundColor: BUTTON_ACCENT,
-        margin: 12,
-        borderRadius: 30,
+        marginVertical: 7,
+        marginLeft: 7,
+        borderRadius: 10        ,
+        borderBottomEndRadius: 100,
+        shadowRadius: 20,
+        shadowOpacity: 0.3,
+        flex: 1,
+        flexGrow: 1,
+        justifyContent: 'center'
+    },
+    muteBut: {
+        backgroundColor: BUTTON_ACCENT,
+        marginVertical: 7,
+        marginRight: 7,
+        borderRadius: 10,
+        borderTopStartRadius: 100,
+        shadowRadius: 20,
+        shadowOpacity: 0.3,
+        flex: 1,
+        flexGrow: 1,
+        justifyContent: 'center'
+    },
+    conButton: {
+        backgroundColor: BUTTON_ACCENT,
+        margin: 7,
+        borderTopEndRadius: 10,
+        borderTopStartRadius: 10,
+        borderBottomEndRadius: 30,
+        borderBottomStartRadius: 30,
         shadowRadius: 20,
         shadowOpacity: 0.3,
         flex: 1,

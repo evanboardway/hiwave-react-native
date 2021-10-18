@@ -1,4 +1,4 @@
-import { WSCONNECTED, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE } from "../../helpers/enums";
+import { WSCONNECTED, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -31,11 +31,13 @@ export const websocketMiddleware = store => next => action => {
                             type: WRTC_ANSWER,
                             payload: message.data
                         })
+                        break
                     case "wrtc_candidate":
                         dispatch({
                             type: WRTC_ICE_CANDIDATE,
                             payload: message.data
                         })
+                        break
                 }
             }
 
@@ -49,6 +51,9 @@ export const websocketMiddleware = store => next => action => {
 
             socket.onclose = () => {
                 dispatch({
+                    type: WRTC_DISCONNECT
+                })
+                dispatch({
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTING
                 })
@@ -61,14 +66,14 @@ export const websocketMiddleware = store => next => action => {
                     }
                 }, timeout)
             }
-            
+
             break
 
         case WS_SEND_MESSAGE:
             let payload = JSON.stringify(action.payload)
             ws.send(payload)
             break
-        
+
         default:
             next(action)
     }

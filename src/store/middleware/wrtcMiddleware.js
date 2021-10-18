@@ -58,6 +58,7 @@ export const webrtcMiddleware = store => next => action => {
                     }
                 }
 
+
                 // Messes up the local sdp for now.
                 // peerConnection.onnegotiationneeded = () => {
                 //     peerConnection.createOffer().then(offer => {

@@ -16,4 +16,5 @@ export const WRTC_OFFER = "wrtc_offer"
 export const WRTC_ICE_CANDIDATE = "wrtc_ice_candidate"
 export const WRTC_RENEGOTIATION = "wrtc_renegotiation"
 export const WRTC_DISCONNECT = "wrtc_disconnect"
+export const WRTC_ADD_TRACK = "wrtc_add_track"
 

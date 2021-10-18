@@ -17,7 +17,7 @@ export default class Map extends Component {
     return (
         <View style={styles.map}>
           <MapboxGL.MapView
-            styleURL={MapboxGL.StyleURL.Street}
+            styleURL={"mapbox://styles/tessoro-/ckux4pjtw19fy18n0w3k7xz78"}
             zoomLevel={16}
             centerCoordinate={[3.3362400, 6.5790100]}
             showUserLocation={true}

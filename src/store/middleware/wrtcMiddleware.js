@@ -41,10 +41,13 @@ export const webrtcMiddleware = store => next => action => {
             peerConnection = new RTCPeerConnection(configuration)
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-                peerConnection.addStream(stream)
+                // peerConnection.addStream(stream)
 
 
                 // peerConnection.createDataChannel("yeet")
+                // console.log(stream._tracks)
+
+                peerConnection.addTransceiver(stream._tracks[0], {}).then(succ => console.log("TRANC: ", succ)).catch(err => console.log("TRANC ERR: ", err))
 
                 peerConnection.onicecandidate = (e) => {
                     if (e.candidate) {
@@ -75,6 +78,7 @@ export const webrtcMiddleware = store => next => action => {
                 // }
 
                 peerConnection.onconnectionstatechange = (e) => {
+                    console.log("STATE CHANGE")
                     let conState
                     switch (e.currentTarget.connectionState) {
                         case "connecting":
@@ -99,7 +103,7 @@ export const webrtcMiddleware = store => next => action => {
                 peerConnection.createOffer().then(offer => {
                     ldesc = new RTCSessionDescription(offer)
                     peerConnection.setLocalDescription(ldesc)
-                    console.log("OFFER PAYLOAD ", ldesc)
+                    // console.log("OFFER PAYLOAD ", ldesc)
 
                     dispatch({
                         type: WS_SEND_MESSAGE,
@@ -122,7 +126,7 @@ export const webrtcMiddleware = store => next => action => {
 
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            console.log("ANSWER PAYLOAD ", JSON.parse(action.payload))
+            // console.log("ANSWER PAYLOAD ", JSON.parse(action.payload))
             peerConnection.setRemoteDescription(rdesc).catch(err => {
                 console.log(err.message),
                     dispatch({

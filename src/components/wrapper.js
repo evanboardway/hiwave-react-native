@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { WSCONNECTING, WSFAILED, WSCONNECTED, WSCONNECT } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
+import StreamRenderer from './streamRenderer'
 import { DARK_THEME, OVERLAY_2,MAPBOX_THEME } from '../assets/themes';
 
 
@@ -22,6 +23,9 @@ const HomeWrapper = (props) => {
                 <View style={styles.wrapper}>
                     <View style={styles.map}>
                         <MapView></MapView>
+                    </View>
+                    <View style={styles.streamRenderer}>
+                        <StreamRenderer></StreamRenderer>
                     </View>
                     <View style={styles.controls}>
                         <ControlsView></ControlsView>
@@ -59,6 +63,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%'
+    },
+    streamRenderer: {
+        height: 0
     }
 });
 

@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_RENEGOTIATION, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_RENEGOTIATION, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -43,7 +43,7 @@ export const webrtcMiddleware = store => next => action => {
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
 
                 peerConnection.addTransceiver(stream._tracks[0], {}).then(succ => {
-                    console.log("TRANC: ", succ)
+                    // console.log("TRANC: ", succ)
 
                     // peerConnection.onnegotiationneeded = () => {
                     //     console.log("RENEG")
@@ -75,8 +75,12 @@ export const webrtcMiddleware = store => next => action => {
                     }
                 }
 
-                peerConnection.onaddtrack = (e) => {
-                    console.log("ONTRACK")
+                peerConnection.onaddstream = (e) => {
+                    console.log("ONADDSTREAM")
+                    dispatch({
+                        type: WRTC_ADD_STREAM,
+                        payload: e.currentTarget._remoteStreams
+                    })
                 }
 
 
@@ -104,16 +108,16 @@ export const webrtcMiddleware = store => next => action => {
 
                 peerConnection.createOffer().then(offer => {
                     ldesc = new RTCSessionDescription(offer)
-                    peerConnection.setLocalDescription(ldesc)
-                    // console.log("OFFER PAYLOAD ", ldesc)
-
-                    dispatch({
-                        type: WS_SEND_MESSAGE,
-                        payload: {
-                            event: WRTC_OFFER,
-                            data: JSON.stringify(ldesc)
-                        }
+                    peerConnection.setLocalDescription(ldesc).then(() => {
+                        dispatch({
+                            type: WS_SEND_MESSAGE,
+                            payload: {
+                                event: WRTC_OFFER,
+                                data: JSON.stringify(ldesc)
+                            }
+                        })
                     })
+                    // console.log("OFFER PAYLOAD ", ldesc)
                 })
 
                 dispatch({

@@ -16,36 +16,26 @@ const styles = StyleSheet.create({
 });
 
 const Map = (props) => {
-    return (
-        <View style={styles.map}>
-          <MapboxGL.MapView
-            styleURL={"mapbox://styles/tessoro-/ckux4pjtw19fy18n0w3k7xz78"}
-            showUserLocation={true}
-            style={{flex: 1}}>
-              <MapboxGL.Camera
-                zoomLevel={16}
-                followUserLocation={true}
-                centerCoordinate={[props.location.coords.longitude, props.location.coords.latitude]}
-              >
-              </MapboxGL.Camera>
-              <MapboxGL.UserLocation/>
-          </MapboxGL.MapView>
-        </View>
-      );
+  return (
+    <View style={styles.map}>
+      <MapboxGL.MapView
+        styleURL={"mapbox://styles/tessoro-/ckux4pjtw19fy18n0w3k7xz78"}
+        showUserLocation={true}
+        style={{ flex: 1 }}>
+        <MapboxGL.Camera
+          zoomLevel={16}
+          followUserLocation={true}
+          centerCoordinate={[props.location.coords.longitude, props.location.coords.latitude]}
+        >
+        </MapboxGL.Camera>
+        <MapboxGL.UserLocation />
+      </MapboxGL.MapView>
+    </View>
+  );
 }
 
-
-// const MapView = (props) => {
-    
-//     return (
-//         <View>
-//             <Text>Map</Text>
-//         </View>
-//     );
-// }
-
 const mapStateToProps = (state) => {
-    return { location: state.currentLocation }
+  return { location: state.currentLocation }
 };
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(Map);

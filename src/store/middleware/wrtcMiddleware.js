@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_RENEGOTIATION, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -32,6 +32,7 @@ export const webrtcMiddleware = store => next => action => {
             break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
+            peerConnection = null
             dispatch({
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED
@@ -43,23 +44,20 @@ export const webrtcMiddleware = store => next => action => {
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
 
                 peerConnection.addTransceiver(stream._tracks[0], {}).then(succ => {
-                    // console.log("TRANC: ", succ)
 
-                    // peerConnection.onnegotiationneeded = () => {
-                    //     console.log("RENEG")
-                    //     peerConnection.createOffer().then(offer => {
-                    //         ldesc = new RTCSessionDescription(offer)
-                    //         peerConnection.setLocalDescription(ldesc)
-                    //         dispatch({
-                    //             type: WS_SEND_MESSAGE,
-                    //             payload: {
-                    //                 Event: WRTC_RENEGOTIATION,
-                    //                 Data: JSON.stringify(ldesc)
-                    //             }
-                    //         })
-                    //     }).catch(err => console.log("NEG NEED C OFF: ", err))
-                    // }
-
+                    peerConnection.onnegotiationneeded = () => {
+                        peerConnection.createOffer().then(offer => {
+                            ldesc = new RTCSessionDescription(offer)
+                            peerConnection.setLocalDescription(ldesc)
+                            dispatch({
+                                type: WS_SEND_MESSAGE,
+                                payload: {
+                                    Event: WRTC_RENEGOTIATION_NEEDED,
+                                    Data: JSON.stringify(ldesc)
+                                }
+                            })
+                        }).catch(err => console.log("NEG NEED C OFF: ", err))
+                    }
 
                 }).catch(err => console.log("TRANC ERR: ", err))
 
@@ -99,7 +97,7 @@ export const webrtcMiddleware = store => next => action => {
                             break;
                     }
 
-                    console.log("connection state change ", e.currentTarget.connectionState)
+                    console.log("connection state change:", e.currentTarget.connectionState)
                     dispatch({
                         type: WRTC_UPDATE_CONNECTION_STATE,
                         payload: conState
@@ -132,7 +130,6 @@ export const webrtcMiddleware = store => next => action => {
 
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            // console.log("ANSWER PAYLOAD ", JSON.parse(action.payload))
             peerConnection.setRemoteDescription(rdesc).catch(err => {
                 console.log(err.message),
                     dispatch({
@@ -141,14 +138,21 @@ export const webrtcMiddleware = store => next => action => {
             })
             break
         case WRTC_ICE_CANDIDATE:
-            candidate = new RTCIceCandidate(JSON.parse(action.payload))
-            // console.log(action.payload)
-            peerConnection.addIceCandidate(candidate).then(resp => {
-                // console.log(resp)
-            }).catch(fail => console.log(fail))
+            if (peerConnection) {
+                candidate = new RTCIceCandidate(JSON.parse(action.payload))
+                peerConnection.addIceCandidate(candidate).then(resp => {
+                }).catch(fail => console.log(fail))
+            }
             break
-        case WRTC_RENEGOTIATION:
-            console.log("RENEGO: ", action.payload)
+        case WRTC_RENEGOTIATE:
+            console.log("renegotiated")
+            rdesc = new RTCSessionDescription(JSON.parse(action.payload))
+            peerConnection.setRemoteDescription(rdesc).catch(err => {
+                console.log(err.message),
+                    dispatch({
+                        type: WRTC_DISCONNECT
+                    })
+            })
             break
         default:
             next(action)

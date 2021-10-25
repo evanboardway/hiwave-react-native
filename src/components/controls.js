@@ -30,7 +30,10 @@ const ControlsView = (props) => {
                         color='rgba(255, 255, 255, 0.7)'
                         onPress={() => {
                             props.dispatch({
-                                type: WRTC_ADD_TRACK
+                                type: WS_SEND_MESSAGE,
+                                payload: {
+                                    event: "voice"
+                                }
                             })
                         }}
                     />
@@ -42,11 +45,10 @@ const ControlsView = (props) => {
                         color='rgba(255, 255, 255, 0.7)'
                         // disabled={true}
                         onPress={() => {
-                            console.log("mute")
                             props.dispatch({
                                 type: WS_SEND_MESSAGE,
                                 payload: {
-                                    event: "test"
+                                    event: "mute"
                                 }
                             })
                         }}

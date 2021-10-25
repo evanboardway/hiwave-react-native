@@ -41,13 +41,27 @@ export const webrtcMiddleware = store => next => action => {
             peerConnection = new RTCPeerConnection(configuration)
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-                // peerConnection.addStream(stream)
+
+                peerConnection.addTransceiver(stream._tracks[0], {}).then(succ => {
+                    console.log("TRANC: ", succ)
+
+                    // peerConnection.onnegotiationneeded = () => {
+                    //     console.log("RENEG")
+                    //     peerConnection.createOffer().then(offer => {
+                    //         ldesc = new RTCSessionDescription(offer)
+                    //         peerConnection.setLocalDescription(ldesc)
+                    //         dispatch({
+                    //             type: WS_SEND_MESSAGE,
+                    //             payload: {
+                    //                 Event: WRTC_RENEGOTIATION,
+                    //                 Data: JSON.stringify(ldesc)
+                    //             }
+                    //         })
+                    //     }).catch(err => console.log("NEG NEED C OFF: ", err))
+                    // }
 
 
-                // peerConnection.createDataChannel("yeet")
-                // console.log(stream._tracks)
-
-                peerConnection.addTransceiver(stream._tracks[0], {}).then(succ => console.log("TRANC: ", succ)).catch(err => console.log("TRANC ERR: ", err))
+                }).catch(err => console.log("TRANC ERR: ", err))
 
                 peerConnection.onicecandidate = (e) => {
                     if (e.candidate) {
@@ -61,24 +75,12 @@ export const webrtcMiddleware = store => next => action => {
                     }
                 }
 
+                peerConnection.onaddtrack = (e) => {
+                    console.log("ONTRACK")
+                }
 
-                // Messes up the local sdp for now.
-                // peerConnection.onnegotiationneeded = () => {
-                //     peerConnection.createOffer().then(offer => {
-                //         ldesc = new RTCSessionDescription(offer)
-                //         peerConnection.setLocalDescription(ldesc)
-                //         dispatch({
-                //             type: WS_SEND_MESSAGE,
-                //             payload: {
-                //                 Event: WRTC_RENEGOTIATION,
-                //                 Data: JSON.stringify(ldesc)
-                //             }
-                //         })
-                //     }).catch(err => console.log("NEG NEED C OFF: ", err))
-                // }
 
                 peerConnection.onconnectionstatechange = (e) => {
-                    console.log("STATE CHANGE")
                     let conState
                     switch (e.currentTarget.connectionState) {
                         case "connecting":

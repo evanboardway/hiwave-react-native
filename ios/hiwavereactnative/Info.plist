@@ -53,9 +53,7 @@
 	<false/>
   <key>UIStatusBarStyle</key>
   <string>UIStatusBarStyleDefault</string>
-  <key>NSCameraUsageDescription</key>
-  <string>Camera permission description</string>
   <key>NSMicrophoneUsageDescription</key>
-  <string>Microphone permission description</string>
+  <string>Talk to peers driving in your area</string>
 </dict>
 </plist>

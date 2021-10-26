@@ -75,13 +75,15 @@ export const webrtcMiddleware = store => next => action => {
                     peerConnection.onnegotiationneeded = () => {
                         peerConnection.createOffer().then(offer => {
                             ldesc = new RTCSessionDescription(offer)
-                            peerConnection.setLocalDescription(ldesc)
-                            dispatch({
-                                type: WS_SEND_MESSAGE,
-                                payload: {
-                                    Event: WRTC_RENEGOTIATION_NEEDED,
-                                    Data: JSON.stringify(ldesc)
-                                }
+                            peerConnection.setLocalDescription(ldesc).then(() => {
+                                dispatch({
+                                    type: WS_SEND_MESSAGE,
+                                    payload: {
+                                        Event: WRTC_RENEGOTIATION_NEEDED,
+                                        Data: JSON.stringify(ldesc)
+                                    }
+                                })
+
                             })
                         }).catch(err => console.log("NEG NEED C OFF: ", err))
                     }

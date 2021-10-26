@@ -44,6 +44,12 @@ export const websocketMiddleware = store => next => action => {
                             payload: message.data
                         })
                         break
+                    case "wrtc_failed":
+                        console.log("RECEIVED: wrtc connection state failed. Disconnecting.")
+                        dispatch({
+                            type: WRTC_DISCONNECT
+                        })
+                        break
                 }
             }
 

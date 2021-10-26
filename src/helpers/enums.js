@@ -5,7 +5,6 @@ export const WSFAILED = "wsfailed"
 export const UPDATE_WSCONNECTIONSTATE = "update_wsconnectionstate"
 export const WS_SEND_MESSAGE = "ws_send_message"
 
-// export const UPDATE_WRTC_CONNECTION_STATE = "update_wrtc_connection_state"
 export const WRTC_UPDATE_CONNECTION_STATE = "wrtc_update_connection_state"
 export const WRTC_ANSWER = "wrtc_answer"
 export const WRTC_CONNECTING = "wrtc_connecting"
@@ -20,7 +19,6 @@ export const WRTC_DISCONNECT = "wrtc_disconnect"
 export const WRTC_ADD_TRACK = "wrtc_add_track"
 export const WRTC_ADD_STREAM = "wrtc_add_stream"
 
-//
 export const UPDATE_LOCATION = "update_location"
 export const START_LOCATION_SERVICE = "start_location_service"
 

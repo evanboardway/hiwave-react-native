@@ -25,7 +25,6 @@ export const webrtcMiddleware = store => next => action => {
     switch (action.type) {
         case WRTC_ADD_TRACK:
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-                // console.log(stream)
                 peerConnection.addStream(stream)
             }).catch(err => console.log("ERR WITH STREAM", err))
 
@@ -36,6 +35,34 @@ export const webrtcMiddleware = store => next => action => {
             dispatch({
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED
+            })
+            break
+        case WRTC_ANSWER:
+            rdesc = new RTCSessionDescription(JSON.parse(action.payload))
+            peerConnection.setRemoteDescription(rdesc).catch(err => {
+                console.log(err.message),
+                    dispatch({
+                        type: WRTC_DISCONNECT
+                    })
+            })
+            break
+        case WRTC_ICE_CANDIDATE:
+            if (peerConnection) {
+                candidate = new RTCIceCandidate(JSON.parse(action.payload))
+                peerConnection.addIceCandidate(candidate).then(resp => {
+                }).catch(fail => console.log(fail))
+            }
+            break
+        case WRTC_RENEGOTIATE:
+            console.log("renegotiating")
+            rdesc = new RTCSessionDescription(JSON.parse(action.payload))
+            console.log("RENEGOTIATION RDESC: ", rdesc)
+            console.log("CURRENT LOCAL DESC: ", peerConnection.localDescription)
+            peerConnection.setRemoteDescription(rdesc).catch(err => {
+                console.log(err.message),
+                    dispatch({
+                        type: WRTC_DISCONNECT
+                    })
             })
             break
         case WRTC_CONNECT:
@@ -74,7 +101,7 @@ export const webrtcMiddleware = store => next => action => {
                 }
 
                 peerConnection.onaddstream = (e) => {
-                    console.log("ONADDSTREAM")
+                    console.log("ONADDSTREAM", e.currentTarget._remoteStreams)
                     dispatch({
                         type: WRTC_ADD_STREAM,
                         payload: e.currentTarget._remoteStreams
@@ -123,35 +150,6 @@ export const webrtcMiddleware = store => next => action => {
                     payload: WRTC_CONNECTING
                 })
 
-            })
-
-
-            break
-
-        case WRTC_ANSWER:
-            rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            peerConnection.setRemoteDescription(rdesc).catch(err => {
-                console.log(err.message),
-                    dispatch({
-                        type: WRTC_DISCONNECT
-                    })
-            })
-            break
-        case WRTC_ICE_CANDIDATE:
-            if (peerConnection) {
-                candidate = new RTCIceCandidate(JSON.parse(action.payload))
-                peerConnection.addIceCandidate(candidate).then(resp => {
-                }).catch(fail => console.log(fail))
-            }
-            break
-        case WRTC_RENEGOTIATE:
-            console.log("renegotiated")
-            rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            peerConnection.setRemoteDescription(rdesc).catch(err => {
-                console.log(err.message),
-                    dispatch({
-                        type: WRTC_DISCONNECT
-                    })
             })
             break
         default:

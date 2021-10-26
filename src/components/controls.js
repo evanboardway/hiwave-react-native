@@ -43,7 +43,6 @@ const ControlsView = (props) => {
                     <Button
                         title={"MUTE"}
                         color='rgba(255, 255, 255, 0.7)'
-                        // disabled={true}
                         onPress={() => {
                             props.dispatch({
                                 type: WS_SEND_MESSAGE,

@@ -55,6 +55,9 @@ export const webrtcMiddleware = store => next => action => {
             break
         case WRTC_RENEGOTIATE:
             console.log("renegotiating")
+            if (peerConnection.signalingState != "stable") {
+                return
+            }
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
             console.log("RENEGOTIATION RDESC: ", rdesc)
             console.log("CURRENT LOCAL DESC: ", peerConnection.localDescription)
@@ -74,6 +77,7 @@ export const webrtcMiddleware = store => next => action => {
 
                     peerConnection.onnegotiationneeded = () => {
                         peerConnection.createOffer().then(offer => {
+                            if (peerConnection.signalingState != "stable") return
                             ldesc = new RTCSessionDescription(offer)
                             peerConnection.setLocalDescription(ldesc).then(() => {
                                 dispatch({
@@ -140,7 +144,7 @@ export const webrtcMiddleware = store => next => action => {
                             type: WS_SEND_MESSAGE,
                             payload: {
                                 event: WRTC_OFFER,
-                                data: JSON.stringify(ldesc)
+                                data: JSON.stringify(peerConnection.localDescription)
                             }
                         })
                     })

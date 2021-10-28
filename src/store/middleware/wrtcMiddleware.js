@@ -39,6 +39,7 @@ export const webrtcMiddleware = store => next => action => {
             break
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
+            console.log(rdesc)
             peerConnection.setRemoteDescription(rdesc).catch(err => {
                 console.log(err.message),
                     dispatch({
@@ -59,9 +60,19 @@ export const webrtcMiddleware = store => next => action => {
                 return
             }
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            console.log("RENEGOTIATION RDESC: ", rdesc)
-            console.log("CURRENT LOCAL DESC: ", peerConnection.localDescription)
-            peerConnection.setRemoteDescription(rdesc).catch(err => {
+            peerConnection.setRemoteDescription(rdesc).then(() => {
+                console.log("set remote desc\n", rdesc)
+                peerConnection.createAnswer().then(answer => {
+                    console.log("answering remote desc\n", answer)
+                    dispatch({
+                        type: WS_SEND_MESSAGE,
+                        payload: {
+                            Event: WRTC_ANSWER,
+                            Data: JSON.stringify(answer)
+                        }
+                    })
+                })
+            }).catch(err => {
                 console.log(err.message),
                     dispatch({
                         type: WRTC_DISCONNECT
@@ -73,26 +84,29 @@ export const webrtcMiddleware = store => next => action => {
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
 
-                peerConnection.addTransceiver(stream._tracks[0], {}).then(succ => {
+                peerConnection.addTransceiver(stream._tracks[0], {}).then(() => {
 
-                    peerConnection.onnegotiationneeded = () => {
-                        peerConnection.createOffer().then(offer => {
-                            if (peerConnection.signalingState != "stable") return
-                            ldesc = new RTCSessionDescription(offer)
-                            peerConnection.setLocalDescription(ldesc).then(() => {
-                                dispatch({
-                                    type: WS_SEND_MESSAGE,
-                                    payload: {
-                                        Event: WRTC_RENEGOTIATION_NEEDED,
-                                        Data: JSON.stringify(ldesc)
-                                    }
-                                })
-
-                            })
-                        }).catch(err => console.log("NEG NEED C OFF: ", err))
-                    }
 
                 }).catch(err => console.log("TRANC ERR: ", err))
+
+                // peerConnection.onnegotiationneeded = () => {
+                //     console.log("onrenegotiationneeded", peerConnection.signalingState)
+                //     peerConnection.createOffer().then(offer => {
+                //         if (peerConnection.signalingState != "stable") return
+                //         ldesc = new RTCSessionDescription(offer)
+                //         peerConnection.setLocalDescription(ldesc).then(() => {
+                //             dispatch({
+                //                 type: WS_SEND_MESSAGE,
+                //                 payload: {
+                //                     Event: WRTC_RENEGOTIATION_NEEDED,
+                //                     Data: JSON.stringify(ldesc)
+                //                 }
+                //             })
+
+                //         })
+                //     }).catch(err => console.log("NEG NEED C OFF: ", err))
+                // }
+
 
                 peerConnection.onicecandidate = (e) => {
                     if (e.candidate) {

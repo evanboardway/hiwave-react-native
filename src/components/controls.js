@@ -30,7 +30,10 @@ const ControlsView = (props) => {
                         color='rgba(255, 255, 255, 0.7)'
                         onPress={() => {
                             props.dispatch({
-                                type: WRTC_ADD_TRACK
+                                type: WS_SEND_MESSAGE,
+                                payload: {
+                                    event: "voice"
+                                }
                             })
                         }}
                     />
@@ -40,13 +43,11 @@ const ControlsView = (props) => {
                     <Button
                         title={"MUTE"}
                         color='rgba(255, 255, 255, 0.7)'
-                        // disabled={true}
                         onPress={() => {
-                            console.log("mute")
                             props.dispatch({
                                 type: WS_SEND_MESSAGE,
                                 payload: {
-                                    event: "test"
+                                    event: "mute"
                                 }
                             })
                         }}
@@ -106,8 +107,8 @@ const styles = StyleSheet.create({
         margin: 7,
         borderTopEndRadius: 10,
         borderTopStartRadius: 10,
-        borderBottomEndRadius: 30,
-        borderBottomStartRadius: 30,
+        borderBottomEndRadius: 40,
+        borderBottomStartRadius: 40,
         shadowRadius: 20,
         shadowOpacity: 0.3,
         flex: 1,

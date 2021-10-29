@@ -1,4 +1,4 @@
-import { WSCONNECTED, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT } from "../../helpers/enums";
+import { WSCONNECTED, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -10,6 +10,7 @@ export const websocketMiddleware = store => next => action => {
 
     switch (action.type) {
         case WSCONNECT:
+            // socket = new WebSocket("ws://192.168.4.25:5000/websocket")
             socket = new WebSocket("ws://localhost:5000/websocket")
 
             socket.onopen = () => {
@@ -36,6 +37,18 @@ export const websocketMiddleware = store => next => action => {
                         dispatch({
                             type: WRTC_ICE_CANDIDATE,
                             payload: message.data
+                        })
+                        break
+                    case WRTC_RENEGOTIATION_NEEDED:
+                        dispatch({
+                            type: WRTC_RENEGOTIATE,
+                            payload: message.data
+                        })
+                        break
+                    case "wrtc_failed":
+                        console.log("RECEIVED: wrtc connection state failed. Disconnecting.")
+                        dispatch({
+                            type: WRTC_DISCONNECT
                         })
                         break
                 }

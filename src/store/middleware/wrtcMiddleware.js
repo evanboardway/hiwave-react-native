@@ -63,13 +63,14 @@ export const webrtcMiddleware = store => next => action => {
             peerConnection.setRemoteDescription(rdesc).then(() => {
                 console.log("set remote desc\n", rdesc)
                 peerConnection.createAnswer().then(answer => {
-                    console.log("answering remote desc\n", answer)
-                    dispatch({
-                        type: WS_SEND_MESSAGE,
-                        payload: {
-                            Event: WRTC_ANSWER,
-                            Data: JSON.stringify(answer)
-                        }
+                    peerConnection.setLocalDescription(answer).then(() => {
+                        dispatch({
+                            type: WS_SEND_MESSAGE,
+                            payload: {
+                                Event: WRTC_ANSWER,
+                                Data: JSON.stringify(answer)
+                            }
+                        })
                     })
                 })
             }).catch(err => {

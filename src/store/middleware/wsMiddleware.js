@@ -1,4 +1,4 @@
-import { WSCONNECTED, START_LOCATION_SERVICE, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE } from "../../helpers/enums";
+import { WSCONNECTED, START_LOCATION_SERVICE, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -54,6 +54,8 @@ export const websocketMiddleware = store => next => action => {
                             type: WRTC_DISCONNECT
                         })
                         break
+                    default:
+                        console.log("Caught unrecognized message\n", message.data)
                 }
             }
 
@@ -73,6 +75,9 @@ export const websocketMiddleware = store => next => action => {
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTING
                 })
+                dispatch({
+                    type: STOP_LOCATION_SERVICE
+                })
 
                 connectionInterval = setTimeout(() => {
                     if (!ws || ws.readyState == WebSocket.CLOSED) {
@@ -88,6 +93,7 @@ export const websocketMiddleware = store => next => action => {
         case WS_SEND_MESSAGE:
             let payload = JSON.stringify(action.payload)
             ws.send(payload)
+            console.log("Sent:", action.payload.event)
             break
 
         default:

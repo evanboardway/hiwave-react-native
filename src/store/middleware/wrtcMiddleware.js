@@ -24,12 +24,6 @@ const configuration = {
 export const webrtcMiddleware = store => next => action => {
     const { dispatch } = store
     switch (action.type) {
-        case WRTC_ADD_TRACK:
-            mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-                peerConnection.addStream(stream)
-            }).catch(err => console.log("ERR WITH STREAM", err))
-
-            break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
             peerConnection = null
@@ -86,10 +80,7 @@ export const webrtcMiddleware = store => next => action => {
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
 
-                peerConnection.addTransceiver(stream._tracks[0], {}).then(() => {
-
-
-                }).catch(err => console.log("TRANC ERR: ", err))
+                peerConnection.addTransceiver(stream._tracks[0], {}).catch(err => console.log("TRANC ERR: ", err))
 
                 // peerConnection.onnegotiationneeded = () => {
                 //     console.log("onrenegotiationneeded", peerConnection.signalingState)

@@ -10,7 +10,7 @@ export const locationServiceMiddleware = store => next => action => {
     switch (action.type) {
         case START_LOCATION_SERVICE:
             geoWatchId = Geolocation.watchPosition((location) => {
-                console.log(location)
+                // console.log(location)
                 dispatch({
                     type: WS_SEND_MESSAGE,
                     payload: {

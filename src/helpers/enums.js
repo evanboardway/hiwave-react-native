@@ -21,4 +21,3 @@ export const WRTC_ADD_STREAM = "wrtc_add_stream"
 
 export const UPDATE_LOCATION = "update_location"
 export const START_LOCATION_SERVICE = "start_location_service"
-

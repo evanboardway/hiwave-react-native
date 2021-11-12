@@ -17,7 +17,8 @@ let peerConnection
 const configuration = {
     iceServers: [
         { "url": "stun:stun.stunprotocol.org" }
-    ]
+    ],
+    sdpSemantics: "unified-plan"
 }
 
 export const webrtcMiddleware = store => next => action => {

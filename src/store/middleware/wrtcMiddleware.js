@@ -31,6 +31,12 @@ export const webrtcMiddleware = store => next => action => {
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED
             })
+            dispatch({
+                type: WS_SEND_MESSAGE,
+                payload: {
+                    event: WRTC_DISCONNECT
+                }
+            })
             break
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))

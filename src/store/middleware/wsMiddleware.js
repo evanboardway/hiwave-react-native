@@ -10,8 +10,8 @@ export const websocketMiddleware = store => next => action => {
 
     switch (action.type) {
         case WSCONNECT:
-            // socket = new WebSocket("ws://192.168.4.25:5000/websocket")
-            socket = new WebSocket("ws://localhost:5000/websocket")
+            socket = new WebSocket("ws://192.168.4.25:5000/websocket")
+            // socket = new WebSocket("ws://localhost:5000/websocket")
 
             socket.onopen = () => {
                 store.dispatch({

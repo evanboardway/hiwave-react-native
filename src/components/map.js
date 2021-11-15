@@ -23,6 +23,7 @@ const Map = (props) => {
         logoEnabled={false}
         compassEnabled={true}
         scrollEnabled={false}
+        rotateEnabled={false}
         showUserLocation={true}
         style={{ flex: 1 }}>
         <MapboxGL.Camera
@@ -30,9 +31,6 @@ const Map = (props) => {
           followUserLocation={true}
           followUserMode={'course'}
           followZoomLevel={16}
-          //followPitch={true}
-          //followHeading={true}
-          //centerCoordinate={[props.location.coords.longitude, props.location.coords.latitude]}
         >
         </MapboxGL.Camera>
         <MapboxGL.UserLocation />

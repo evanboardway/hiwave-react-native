@@ -1,4 +1,4 @@
-import { WSCONNECTED, START_LOCATION_SERVICE, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE } from "../../helpers/enums";
+import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -54,8 +54,14 @@ export const websocketMiddleware = store => next => action => {
                             type: WRTC_DISCONNECT
                         })
                         break
+                    case PEER_LOCATION:
+                        dispatch({
+                            type: UPDATE_PEER_LOCATION,
+                            payload: JSON.parse(message.data)
+                        })
+                        break
                     default:
-                        console.log("Caught unrecognized message\n", message.data)
+                        console.log("Caught unrecognized message: ", message.data)
                 }
             }
 

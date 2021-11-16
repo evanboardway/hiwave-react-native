@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_STREAM, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -40,7 +40,7 @@ export const webrtcMiddleware = store => next => action => {
             break
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            console.log(rdesc)
+            // console.log(rdesc)
             peerConnection.setRemoteDescription(rdesc).catch(err => {
                 console.log(err.message),
                     dispatch({
@@ -62,7 +62,7 @@ export const webrtcMiddleware = store => next => action => {
             }
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
             peerConnection.setRemoteDescription(rdesc).then(() => {
-                console.log("set remote desc\n", rdesc)
+                // console.log("set remote desc\n", rdesc)
                 peerConnection.createAnswer().then(answer => {
                     peerConnection.setLocalDescription(answer).then(() => {
                         dispatch({
@@ -143,7 +143,7 @@ export const webrtcMiddleware = store => next => action => {
                             break;
                     }
 
-                    console.log("connection state change:", e.currentTarget.connectionState)
+                    // console.log("connection state change:", e.currentTarget.connectionState)
                     dispatch({
                         type: WRTC_UPDATE_CONNECTION_STATE,
                         payload: conState

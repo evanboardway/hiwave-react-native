@@ -1,4 +1,4 @@
-import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION } from "../../helpers/enums";
+import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, WRTC_REMOVE_STREAM } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -14,14 +14,14 @@ export const websocketMiddleware = store => next => action => {
             // socket = new WebSocket("ws://localhost:5000/websocket")
 
             socket.onopen = () => {
-                store.dispatch({
-                    type: START_LOCATION_SERVICE
-                  })
                 clearTimeout(connectionInterval)
                 ws = socket
                 dispatch({
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTED
+                })
+                store.dispatch({
+                    type: START_LOCATION_SERVICE
                 })
             }
 
@@ -98,8 +98,8 @@ export const websocketMiddleware = store => next => action => {
 
         case WS_SEND_MESSAGE:
             let payload = JSON.stringify(action.payload)
-            ws.send(payload)
             console.log("Sent:", action.payload.event)
+            ws.send(payload)
             break
 
         default:

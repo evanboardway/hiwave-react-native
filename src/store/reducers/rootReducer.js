@@ -1,4 +1,4 @@
-import { WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_PEER_LOCATION, UPDATE_WSCONNECTIONSTATE, WRTC_DISCONNECTED, UPDATE_WRTC_CONNECTION_STATE, WRTC_UPDATE_CONNECTION_STATE, UPDATE_LOCATION, WRTC_ADD_STREAM } from "../../helpers/enums"
+import { WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_PEER_LOCATION, UPDATE_WSCONNECTIONSTATE, WRTC_REMOVE_STREAM, WRTC_DISCONNECTED, UPDATE_WRTC_CONNECTION_STATE, WRTC_UPDATE_CONNECTION_STATE, UPDATE_LOCATION, WRTC_ADD_STREAM } from "../../helpers/enums"
 
 const initialState = {
     wsConnectionState: WSCONNECTING,
@@ -17,8 +17,9 @@ export function rootReducer(state = initialState, action) {
         case UPDATE_LOCATION:
             return {...state, currentLocation: action.payload}
         case UPDATE_PEER_LOCATION:
-            state.peerLocations.set(action.payload.UUID, action.payload.Location)
-            return 
+            st = state.peerLocations.set(action.payload.UUID, action.payload.Location)
+            // console.log(state.peerLocations)
+            return state
         case WRTC_ADD_STREAM:
             return {...state, incomingStreams: action.payload}
         default:

@@ -20,12 +20,17 @@ const Map = (props) => {
     <View style={styles.map}>
       <MapboxGL.MapView
         styleURL={"mapbox://styles/tessoro-/ckux4pjtw19fy18n0w3k7xz78"}
+        logoEnabled={false}
+        compassEnabled={true}
+        scrollEnabled={false}
+        rotateEnabled={false}
         showUserLocation={true}
         style={{ flex: 1 }}>
         <MapboxGL.Camera
           zoomLevel={16}
           followUserLocation={true}
-          centerCoordinate={[props.location.coords.longitude, props.location.coords.latitude]}
+          followUserMode={'course'}
+          followZoomLevel={16}
         >
         </MapboxGL.Camera>
         <MapboxGL.UserLocation />

@@ -18,7 +18,10 @@ export const WRTC_RENEGOTIATE = "wrtc_renegotiate"
 export const WRTC_DISCONNECT = "wrtc_disconnect"
 export const WRTC_ADD_TRACK = "wrtc_add_track"
 export const WRTC_ADD_STREAM = "wrtc_add_stream"
+export const WRTC_REMOVE_STREAM = "wrtc_remove_stream"
 
 export const UPDATE_LOCATION = "update_location"
+export const UPDATE_PEER_LOCATION = "update_peer_location"
 export const START_LOCATION_SERVICE = "start_location_service"
-
+export const STOP_LOCATION_SERVICE = "stop_location_service"
+export const PEER_LOCATION = "peer_location"

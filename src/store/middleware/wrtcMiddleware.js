@@ -51,7 +51,7 @@ export const webrtcMiddleware = store => next => action => {
         case WRTC_ICE_CANDIDATE:
             if (peerConnection) {
                 candidate = new RTCIceCandidate(JSON.parse(action.payload))
-                peerConnection.addIceCandidate(candidate).then(resp => {
+                peerConnection.addIceCandidate(candidate).then(() => {
                 }).catch(fail => console.log(fail))
             }
             break

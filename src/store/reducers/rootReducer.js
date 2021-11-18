@@ -1,15 +1,18 @@
-import { WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_PEER_LOCATION, UPDATE_WSCONNECTIONSTATE, WRTC_REMOVE_STREAM, WRTC_DISCONNECTED, UPDATE_WRTC_CONNECTION_STATE, WRTC_UPDATE_CONNECTION_STATE, UPDATE_LOCATION, WRTC_ADD_STREAM } from "../../helpers/enums"
+import { ORIENTATION_CHANGE, WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_PEER_LOCATION, UPDATE_WSCONNECTIONSTATE, WRTC_REMOVE_STREAM, WRTC_DISCONNECTED, UPDATE_WRTC_CONNECTION_STATE, WRTC_UPDATE_CONNECTION_STATE, UPDATE_LOCATION, WRTC_ADD_STREAM } from "../../helpers/enums"
 
 const initialState = {
+    orientation: 'portrait',
     wsConnectionState: WSCONNECTING,
     wrtcConnectionState: WRTC_DISCONNECTED,
     currentLocation: {coords: {latitude: 1, longitude: 1}},
     peerLocations: new Map(),
-    incomingStreams: null
+    incomingStreams: []
 }
 
 export function rootReducer(state = initialState, action) {
     switch(action.type) {
+        case ORIENTATION_CHANGE:
+            return {...state, orientation: action.payload}
         case UPDATE_WSCONNECTIONSTATE:
             return {...state, wsConnectionState: action.payload}
         case WRTC_UPDATE_CONNECTION_STATE:

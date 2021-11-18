@@ -1,14 +1,26 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { WSCONNECTING, WSFAILED, WSCONNECTED, WSCONNECT } from '../helpers/enums'
+import { ORIENTATION_CHANGE, WSCONNECTING, WSFAILED } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
 import StreamRenderer from './streamRenderer'
-import { DARK_THEME, OVERLAY_2,MAPBOX_THEME } from '../assets/themes';
+import { DARK_THEME, MAPBOX_THEME } from '../assets/themes';
+import { Dimensions } from 'react-native';
 
+
+const isPortrait = () => {
+    const dim = Dimensions.get('screen');
+    return dim.height >= dim.width;
+};
 
 const HomeWrapper = (props) => {
+    Dimensions.addEventListener('change', () => {
+        props.dispatch({
+            type: ORIENTATION_CHANGE,
+            payload: isPortrait() ? 'portrait' : 'landscape'
+        })
+    });
     switch (props.wsConnectionState) {
         case WSCONNECTING:
             return (<View style={styles.container}>
@@ -20,7 +32,10 @@ const HomeWrapper = (props) => {
             </View>)
         default:
             return (
-                <View style={styles.wrapper}>
+                <View style={props.orientation === "portrait" ? styles.wrapperPortrait : styles.wrapperLandscape}>
+                    <View style={props.orientation === "portrait" ? styles.connectedUserCountPortrait : styles.connectedUserCountLandscape}>
+                        <Text style={styles.connectedUserCount}>{props.userCount}</Text>
+                    </View>
                     <View style={styles.map}>
                         <MapView></MapView>
                     </View>
@@ -44,9 +59,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    wrapper: {
+    wrapperPortrait: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: DARK_THEME,
+        alignItems: 'center',
+    },
+    wrapperLandscape: {
+        flex: 2,
+        flexDirection: 'row',
         backgroundColor: DARK_THEME,
         alignItems: 'center',
     },
@@ -66,6 +87,38 @@ const styles = StyleSheet.create({
     },
     streamRenderer: {
         height: 0
+    },
+    connectedUserCountPortrait: {
+        position: 'absolute',
+        zIndex: 999,
+        backgroundColor: 'rgba(0,0,0, 0.8)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 60,
+        left: 10,
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: 'rgba(235, 64, 52, 0.9)'
+    },
+    connectedUserCountLandscape: {
+        position: 'absolute',
+        zIndex: 999,
+        backgroundColor: 'rgba(0,0,0, 0.8)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 10,
+        left: 10,
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: 'rgba(235, 64, 52, 0.9)'
+    },
+    connectedUserCount: {
+        color: 'rgba(255,255,255, 0.7)',
+        fontSize: 16
     }
 });
 
@@ -73,7 +126,11 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
-    return { wsConnectionState: state.wsConnectionState }
+    return {
+        wsConnectionState: state.wsConnectionState,
+        orientation: state.orientation,
+        userCount: state.incomingStreams.length
+    }
 };
 const mapDispatchToProps = dispatch => ({});
 const connectComponent = connect(mapStateToProps);

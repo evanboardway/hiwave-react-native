@@ -68,8 +68,8 @@ export const webrtcMiddleware = store => next => action => {
                         dispatch({
                             type: WS_SEND_MESSAGE,
                             payload: {
-                                Event: WRTC_ANSWER,
-                                Data: JSON.stringify(answer)
+                                event: WRTC_ANSWER,
+                                data: JSON.stringify(answer)
                             }
                         })
                     })

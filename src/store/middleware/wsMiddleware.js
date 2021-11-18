@@ -74,9 +74,12 @@ export const websocketMiddleware = store => next => action => {
             }
 
             socket.onclose = () => {
-                dispatch({
-                    type: WRTC_DISCONNECT
-                })
+                ws = null
+                if (ws) {
+                    dispatch({
+                        type: WRTC_DISCONNECT
+                    })
+                }
                 dispatch({
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTING

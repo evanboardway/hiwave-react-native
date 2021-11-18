@@ -11,8 +11,8 @@ const StreamRenderer = (props) => {
         rend = (<Text></Text>)
     } else {
         props.streams.forEach(stream => {   
-            // console.log("STREAM RENDERER STREAMS", stream[0].toURL())
-            rend.push(<RTCView streamURL={stream.toURL()} />)
+            console.log("STREAM RENDERER STREAMS", stream.id)
+            rend.push(<RTCView key={stream.id} streamURL={stream.toURL()} />)
         })
     }
     return rend

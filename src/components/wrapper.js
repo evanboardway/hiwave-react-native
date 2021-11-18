@@ -33,6 +33,9 @@ const HomeWrapper = (props) => {
         default:
             return (
                 <View style={props.orientation === "portrait" ? styles.wrapperPortrait : styles.wrapperLandscape}>
+                    <View style={props.orientation === "portrait" ? styles.connectedUserCountPortrait : styles.connectedUserCountLandscape}>
+                        <Text style={styles.connectedUserCount}>{props.userCount}</Text>
+                    </View>
                     <View style={styles.map}>
                         <MapView></MapView>
                     </View>
@@ -84,6 +87,38 @@ const styles = StyleSheet.create({
     },
     streamRenderer: {
         height: 0
+    },
+    connectedUserCountPortrait: {
+        position: 'absolute',
+        zIndex: 999,
+        backgroundColor: 'rgba(0,0,0, 0.8)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 60,
+        left: 10,
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: 'rgba(235, 64, 52, 0.9)'
+    },
+    connectedUserCountLandscape: {
+        position: 'absolute',
+        zIndex: 999,
+        backgroundColor: 'rgba(0,0,0, 0.8)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 10,
+        left: 10,
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: 'rgba(235, 64, 52, 0.9)'
+    },
+    connectedUserCount: {
+        color: 'rgba(255,255,255, 0.7)',
+        fontSize: 16
     }
 });
 
@@ -91,9 +126,10 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
-    return { 
+    return {
         wsConnectionState: state.wsConnectionState,
-        orientation: state.orientation
+        orientation: state.orientation,
+        userCount: state.incomingStreams.length
     }
 };
 const mapDispatchToProps = dispatch => ({});

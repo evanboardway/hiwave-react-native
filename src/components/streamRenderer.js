@@ -7,7 +7,7 @@ const StreamRenderer = (props) => {
     // let rend = props.streams == null ? <Text></Text> : <RTCView streamURL={props.streams[0].toURL()} />
 
     let rend = []
-    if (!props.streams) {
+    if (props.streams.length == 0) {
         rend = (<Text></Text>)
     } else {
         props.streams.forEach(stream => {   

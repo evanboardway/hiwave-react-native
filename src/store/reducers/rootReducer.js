@@ -6,7 +6,7 @@ const initialState = {
     wrtcConnectionState: WRTC_DISCONNECTED,
     currentLocation: {coords: {latitude: 1, longitude: 1}},
     peerLocations: new Map(),
-    incomingStreams: null
+    incomingStreams: []
 }
 
 export function rootReducer(state = initialState, action) {

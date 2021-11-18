@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         backgroundColor: BUTTON_ACCENT,
         marginVertical: 7,
         marginLeft: 7,
-        borderRadius: 10        ,
+        borderRadius: 10,
         borderBottomEndRadius: 100,
         shadowRadius: 20,
         shadowOpacity: 0.3,

@@ -1,3 +1,5 @@
+export const ORIENTATION_CHANGE = "orientation_change"
+
 export const WSCONNECT = "wsconnect"
 export const WSCONNECTED = "wsconnected"
 export const WSCONNECTING = "wsconnecting"

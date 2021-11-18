@@ -1,14 +1,26 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { WSCONNECTING, WSFAILED, WSCONNECTED, WSCONNECT } from '../helpers/enums'
+import { ORIENTATION_CHANGE, WSCONNECTING, WSFAILED } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
 import StreamRenderer from './streamRenderer'
-import { DARK_THEME, OVERLAY_2,MAPBOX_THEME } from '../assets/themes';
+import { DARK_THEME, MAPBOX_THEME } from '../assets/themes';
+import { Dimensions } from 'react-native';
 
+
+const isPortrait = () => {
+    const dim = Dimensions.get('screen');
+    return dim.height >= dim.width;
+};
 
 const HomeWrapper = (props) => {
+    Dimensions.addEventListener('change', () => {
+        props.dispatch({
+            type: ORIENTATION_CHANGE,
+            payload: isPortrait() ? 'portrait' : 'landscape'
+        })
+    });
     switch (props.wsConnectionState) {
         case WSCONNECTING:
             return (<View style={styles.container}>
@@ -20,7 +32,7 @@ const HomeWrapper = (props) => {
             </View>)
         default:
             return (
-                <View style={styles.wrapper}>
+                <View style={props.orientation === "portrait" ? styles.wrapperPortrait : styles.wrapperLandscape}>
                     <View style={styles.map}>
                         <MapView></MapView>
                     </View>
@@ -44,9 +56,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    wrapper: {
+    wrapperPortrait: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: DARK_THEME,
+        alignItems: 'center',
+    },
+    wrapperLandscape: {
+        flex: 2,
+        flexDirection: 'row',
         backgroundColor: DARK_THEME,
         alignItems: 'center',
     },
@@ -73,7 +91,10 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
-    return { wsConnectionState: state.wsConnectionState }
+    return { 
+        wsConnectionState: state.wsConnectionState,
+        orientation: state.orientation
+    }
 };
 const mapDispatchToProps = dispatch => ({});
 const connectComponent = connect(mapStateToProps);

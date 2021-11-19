@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_STREAM, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -87,25 +87,6 @@ export const webrtcMiddleware = store => next => action => {
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
 
                 peerConnection.addTransceiver(stream._tracks[0], {}).catch(err => console.log("TRANC ERR: ", err))
-
-                // peerConnection.onnegotiationneeded = () => {
-                //     console.log("onrenegotiationneeded", peerConnection.signalingState)
-                //     peerConnection.createOffer().then(offer => {
-                //         if (peerConnection.signalingState != "stable") return
-                //         ldesc = new RTCSessionDescription(offer)
-                //         peerConnection.setLocalDescription(ldesc).then(() => {
-                //             dispatch({
-                //                 type: WS_SEND_MESSAGE,
-                //                 payload: {
-                //                     Event: WRTC_RENEGOTIATION_NEEDED,
-                //                     Data: JSON.stringify(ldesc)
-                //                 }
-                //             })
-
-                //         })
-                //     }).catch(err => console.log("NEG NEED C OFF: ", err))
-                // }
-
 
                 peerConnection.onicecandidate = (e) => {
                     if (e.candidate) {

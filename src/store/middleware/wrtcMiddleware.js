@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WSCONNECTED, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -31,12 +31,15 @@ export const webrtcMiddleware = store => next => action => {
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED
             })
+            // console.log(store.getState().wsConnectionState == WSCONNECTED)
+            // if (store.getState().wsConnectionState == WSCONNECTED) {
             dispatch({
                 type: WS_SEND_MESSAGE,
                 payload: {
                     event: WRTC_DISCONNECT
                 }
             })
+            // }
             break
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
@@ -101,7 +104,7 @@ export const webrtcMiddleware = store => next => action => {
                 }
 
                 peerConnection.onaddstream = (e) => {
-                    console.log("ONADDSTREAM", e.currentTarget._remoteStreams)
+                    // console.log("ONADDSTREAM", e.currentTarget._remoteStreams)
                     dispatch({
                         type: WRTC_ADD_STREAM,
                         payload: e.currentTarget._remoteStreams

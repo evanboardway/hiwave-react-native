@@ -27,3 +27,6 @@ export const UPDATE_PEER_LOCATION = "update_peer_location"
 export const START_LOCATION_SERVICE = "start_location_service"
 export const STOP_LOCATION_SERVICE = "stop_location_service"
 export const PEER_LOCATION = "peer_location"
+
+export const ADJUST_PEER_VOLUME = "adjust_peer_volume"
+export const UPDATE_STREAM_VOLUMES = "update_stream_volumes"

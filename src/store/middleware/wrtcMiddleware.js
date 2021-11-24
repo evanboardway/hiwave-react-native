@@ -104,7 +104,8 @@ export const webrtcMiddleware = store => next => action => {
                 }
 
                 peerConnection.onaddstream = (e) => {
-                    // console.log("ONADDSTREAM", e.currentTarget._remoteStreams)
+                    // Client just entered our space, set their volume to 0 initially. 
+                    e.stream.setVolume(0)
                     dispatch({
                         type: WRTC_ADD_STREAM,
                         payload: e.currentTarget._remoteStreams

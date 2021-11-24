@@ -28,7 +28,7 @@ export const locationServiceMiddleware = store => next => action => {
                 })
             },
             err => console.log(err),
-            {distanceFilter: 400})
+            {distanceFilter: 200})
             break
         case ADJUST_PEER_VOLUME:
 

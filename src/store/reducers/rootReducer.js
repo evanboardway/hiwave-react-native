@@ -6,8 +6,7 @@ const initialState = {
     wrtcConnectionState: WRTC_DISCONNECTED,
     currentLocation: new Map(),
     peerLocations: new Map(),
-    incomingStreams: new Array(),
-    streamVolumes: new Map()
+    incomingStreams: new Array()
 }
 
 export function rootReducer(state = initialState, action) {
@@ -30,7 +29,12 @@ export function rootReducer(state = initialState, action) {
         case WRTC_ADD_STREAM:
             return {...state, incomingStreams: action.payload}
         case UPDATE_STREAM_VOLUMES:
-            state.streamVolumes.set(action.payload.UUID, action.payload.Volume)
+            // state.streamVolumes.set(action.payload.UUID, action.payload.Volume)
+            state.incomingStreams.forEach(stream => {
+                if (stream.id == action.payload.UUID) {
+                    stream.setVolume(action.payload.Volume)
+                }
+            })
             return state
         default:
             return state

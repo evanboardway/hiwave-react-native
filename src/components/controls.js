@@ -4,6 +4,7 @@ import { connect, useDispatch } from 'react-redux';
 import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME } from '../assets/themes';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
 
 const ControlsView = (props) => {
@@ -50,6 +51,14 @@ const ControlsView = (props) => {
                                     event: "mute"
                                 }
                             })
+                            /*const stream = await mediaDevices.getUserMedia({
+                                audio: true,
+                                video: false
+                                })
+                                .catch(error => {
+                                console.log('error: ', error)
+                                });
+                            stream.getTracks()[0].enabled*/
                         }}
                     />
                 </View>

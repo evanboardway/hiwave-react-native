@@ -85,6 +85,8 @@ export const webrtcMiddleware = store => next => action => {
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
 
+                console.log(stream)
+
                 peerConnection.addTransceiver(stream._tracks[0], {}).then(() => {
 
 

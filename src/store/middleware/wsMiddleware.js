@@ -7,13 +7,16 @@ export const websocketMiddleware = store => next => action => {
     const { dispatch } = store
 
     let connectionInterval
-
+    
     switch (action.type) {
+        
         case WSCONNECT:
             // socket = new WebSocket("ws://192.168.4.25:5000/websocket")
             socket = new WebSocket("ws://localhost:5000/websocket")
-
+            
+            
             socket.onopen = () => {
+                console.log("socket opened");
                 clearTimeout(connectionInterval)
                 ws = socket
                 dispatch({
@@ -54,7 +57,8 @@ export const websocketMiddleware = store => next => action => {
                 }
             }
 
-            socket.onerror = () => {
+            socket.onerror = (e) => {
+                
                 socket.close()
                 dispatch({
                     type: UPDATE_WSCONNECTIONSTATE,
@@ -63,6 +67,7 @@ export const websocketMiddleware = store => next => action => {
             }
 
             socket.onclose = () => {
+                
                 dispatch({
                     type: WRTC_DISCONNECT
                 })
@@ -70,7 +75,6 @@ export const websocketMiddleware = store => next => action => {
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTING
                 })
-
                 connectionInterval = setTimeout(() => {
                     if (!ws || ws.readyState == WebSocket.CLOSED) {
                         dispatch({
@@ -83,6 +87,7 @@ export const websocketMiddleware = store => next => action => {
             break
 
         case WS_SEND_MESSAGE:
+            console.log("send message")
             let payload = JSON.stringify(action.payload)
             ws.send(payload)
             break

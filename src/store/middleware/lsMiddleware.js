@@ -7,7 +7,7 @@ var geoWatchId
 var ONE_THIRD_MILE = 0.00483091787
 
 function determineVolumePercentage(from, to) {
-    return Math.sqrt(Math.pow((to.Latitude-from.latitude), 2)+Math.pow((to.Longitude-from.longitude), 2))/ONE_THIRD_MILE
+    return Math.sqrt(Math.pow((to.Latitude-from.latitude), 2)+Math.pow((to.Longitude-from.longitude), 2))/ONE_THIRD_MILE *-1
 }
 
 export const locationServiceMiddleware = store => next => action => {
@@ -28,7 +28,7 @@ export const locationServiceMiddleware = store => next => action => {
                 })
             },
             err => console.log(err),
-            {distanceFilter: 200})
+            {distanceFilter: 100})
             break
         case ADJUST_PEER_VOLUME:
 

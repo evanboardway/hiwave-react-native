@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WSCONNECTED, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WSCONNECTED, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE, CLIENT_RESET } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -24,6 +24,11 @@ const configuration = {
 export const webrtcMiddleware = store => next => action => {
     const { dispatch } = store
     switch (action.type) {
+        case CLIENT_RESET:
+            if (peerConnection) peerConnection.close()
+            peerConnection = null
+            next(action)
+            break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
             peerConnection = null
@@ -31,19 +36,18 @@ export const webrtcMiddleware = store => next => action => {
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED
             })
-            // console.log(store.getState().wsConnectionState == WSCONNECTED)
-            // if (store.getState().wsConnectionState == WSCONNECTED) {
             dispatch({
                 type: WS_SEND_MESSAGE,
                 payload: {
                     event: WRTC_DISCONNECT
                 }
             })
-            // }
+            dispatch({
+                type: WRTC_DISCONNECTED
+            })
             break
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
-            // console.log(rdesc)
             peerConnection.setRemoteDescription(rdesc).catch(err => {
                 console.log(err.message),
                     dispatch({
@@ -65,7 +69,6 @@ export const webrtcMiddleware = store => next => action => {
             }
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
             peerConnection.setRemoteDescription(rdesc).then(() => {
-                // console.log("set remote desc\n", rdesc)
                 peerConnection.createAnswer().then(answer => {
                     peerConnection.setLocalDescription(answer).then(() => {
                         dispatch({
@@ -88,7 +91,6 @@ export const webrtcMiddleware = store => next => action => {
             peerConnection = new RTCPeerConnection(configuration)
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-
                 peerConnection.addTransceiver(stream._tracks[0], {}).catch(err => console.log("TRANC ERR: ", err))
 
                 peerConnection.onicecandidate = (e) => {
@@ -104,7 +106,8 @@ export const webrtcMiddleware = store => next => action => {
                 }
 
                 peerConnection.onaddstream = (e) => {
-                    // console.log("ONADDSTREAM", e.currentTarget._remoteStreams)
+                    // Client just entered our space, set their volume to 0 initially. 
+                    e.stream.setVolume(0)
                     dispatch({
                         type: WRTC_ADD_STREAM,
                         payload: e.currentTarget._remoteStreams
@@ -127,7 +130,6 @@ export const webrtcMiddleware = store => next => action => {
                             break;
                     }
 
-                    // console.log("connection state change:", e.currentTarget.connectionState)
                     dispatch({
                         type: WRTC_UPDATE_CONNECTION_STATE,
                         payload: conState
@@ -145,14 +147,13 @@ export const webrtcMiddleware = store => next => action => {
                             }
                         })
                     })
-                    // console.log("OFFER PAYLOAD ", ldesc)
                 })
+
 
                 dispatch({
                     type: WRTC_UPDATE_CONNECTION_STATE,
                     payload: WRTC_CONNECTING
                 })
-
             })
             break
         default:

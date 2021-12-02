@@ -23,7 +23,7 @@ const Map = (props) => {
         logoEnabled={false}
         compassEnabled={true}
         scrollEnabled={false}
-        rotateEnabled={false}
+        rotateEnabled={true}
         showUserLocation={true}
         style={{ flex: 1 }}>
         <MapboxGL.Camera

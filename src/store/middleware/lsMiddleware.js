@@ -15,36 +15,36 @@ export const locationServiceMiddleware = store => next => action => {
     var updator
     switch (action.type) {
         case START_LOCATION_SERVICE:
-            console.log("START LOC SERV")
-
-            geoWatchId = Geolocation.watchPosition((location) => {
-                dispatch({
-                    type: UPDATE_LOCATION,
-                    payload: location.coords
-                })
-                dispatch({
-                    type: WS_SEND_MESSAGE,
-                    payload: {
-                        event: UPDATE_LOCATION,
-                        data: JSON.stringify(location.coords)
-                    }
-                })
-            },
-            err => console.log(err),
-            {distanceFilter: 30})
-
-            updator = setInterval(() => {
-                let state = store.getState()
-                state.peerLocations.forEach((location, uuid) => {
+            if (!geoWatchId) {
+                geoWatchId = Geolocation.watchPosition((location) => {
                     dispatch({
-                        type: ADJUST_PEER_VOLUME,
+                        type: UPDATE_LOCATION,
+                        payload: location.coords
+                    })
+                    dispatch({
+                        type: WS_SEND_MESSAGE,
                         payload: {
-                            UUID: uuid,
-                            Location: location
+                            event: UPDATE_LOCATION,
+                            data: JSON.stringify(location.coords)
                         }
                     })
-                })
-            }, 1000)
+                },
+                err => console.log(err),
+                {distanceFilter: 30})
+    
+                updator = setInterval(() => {
+                    let state = store.getState()
+                    state.peerLocations.forEach((location, uuid) => {
+                        dispatch({
+                            type: ADJUST_PEER_VOLUME,
+                            payload: {
+                                UUID: uuid,
+                                Location: location
+                            }
+                        })
+                    })
+                }, 1000)
+            }
             break
         case ADJUST_PEER_VOLUME:
             console.log("payload", action.payload)

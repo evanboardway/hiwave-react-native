@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import { UPDATE_LOCATION, STOP_LOCATION_SERVICE, START_LOCATION_SERVICE, WS_SEND_MESSAGE, PEER_LOCATION, ADJUST_PEER_VOLUME, UPDATE_PEER_LOCATION, UPDATE_STREAM_VOLUMES } from '../../helpers/enums';
+import { UPDATE_LOCATION, STOP_LOCATION_SERVICE, START_LOCATION_SERVICE, WS_SEND_MESSAGE, PEER_LOCATION, ADJUST_PEER_VOLUME, UPDATE_PEER_LOCATION, UPDATE_STREAM_VOLUMES, CLIENT_RESET } from '../../helpers/enums';
 
 
 //once we get location update tell reducer to update value
@@ -15,6 +15,8 @@ export const locationServiceMiddleware = store => next => action => {
     var updator
     switch (action.type) {
         case START_LOCATION_SERVICE:
+            console.log("START LOC SERV")
+
             geoWatchId = Geolocation.watchPosition((location) => {
                 dispatch({
                     type: UPDATE_LOCATION,
@@ -62,6 +64,13 @@ export const locationServiceMiddleware = store => next => action => {
             Geolocation.clearWatch(geoWatchId)
             geoWatchId = null
             clearInterval(updator)
+            break
+        case CLIENT_RESET:
+            console.log("STOP LOC SERV")
+            Geolocation.clearWatch(geoWatchId)
+            geoWatchId = null
+            clearInterval(updator)
+            next(action)
             break
         default:
             next(action)

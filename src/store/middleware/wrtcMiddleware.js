@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WSCONNECTED, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE } from "../../helpers/enums"
+import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WSCONNECTED, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE, CLIENT_RESET } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -24,6 +24,11 @@ const configuration = {
 export const webrtcMiddleware = store => next => action => {
     const { dispatch } = store
     switch (action.type) {
+        case CLIENT_RESET:
+            if (peerConnection) peerConnection.close()
+            peerConnection = null
+            next(action)
+            break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
             peerConnection = null

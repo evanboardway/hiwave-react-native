@@ -1,4 +1,5 @@
 export const ORIENTATION_CHANGE = "orientation_change"
+export const CLIENT_RESET = "client_reset"
 
 export const WSCONNECT = "wsconnect"
 export const WSCONNECTED = "wsconnected"

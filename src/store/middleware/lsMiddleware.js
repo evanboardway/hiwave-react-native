@@ -65,13 +65,6 @@ export const locationServiceMiddleware = store => next => action => {
             geoWatchId = null
             clearInterval(updator)
             break
-        case CLIENT_RESET:
-            console.log("STOP LOC SERV")
-            Geolocation.clearWatch(geoWatchId)
-            geoWatchId = null
-            clearInterval(updator)
-            next(action)
-            break
         default:
             next(action)
     }

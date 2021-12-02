@@ -1,4 +1,4 @@
-import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, WRTC_REMOVE_TRACK, ADJUST_PEER_VOLUME } from "../../helpers/enums";
+import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, WRTC_REMOVE_TRACK, ADJUST_PEER_VOLUME, WRTC_CANDIDATAE, WRTC_FAILED } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -30,13 +30,13 @@ export const websocketMiddleware = store => next => action => {
                 console.log("RECEIVED: ", message.event)
                 // dispatch accordingly
                 switch (message.event) {
-                    case "wrtc_answer":
+                    case WRTC_ANSWER:
                         dispatch({
                             type: WRTC_ANSWER,
                             payload: message.data
                         })
                         break
-                    case "wrtc_candidate":
+                    case WRTC_CANDIDATAE:
                         dispatch({
                             type: WRTC_ICE_CANDIDATE,
                             payload: message.data
@@ -48,7 +48,7 @@ export const websocketMiddleware = store => next => action => {
                             payload: message.data
                         })
                         break
-                    case "wrtc_failed":
+                    case WRTC_FAILED:
                         console.log("RECEIVED: wrtc connection state failed. Disconnecting.")
                         dispatch({
                             type: WRTC_DISCONNECT
@@ -62,9 +62,13 @@ export const websocketMiddleware = store => next => action => {
                         break
                     case PEER_LOCATION:
                         dispatch({
-                            type: ADJUST_PEER_VOLUME,
+                            type: UPDATE_PEER_LOCATION,
                             payload: JSON.parse(message.data)
                         })
+                        // dispatch({
+                        //     type: ADJUST_PEER_VOLUME,
+                        //     payload: JSON.parse(message.data)
+                        // })
                         break
                     default:
                         console.log("Caught unrecognized message: ", message.data)

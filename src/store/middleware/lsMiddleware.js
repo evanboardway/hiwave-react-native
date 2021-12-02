@@ -12,6 +12,7 @@ function determineVolumePercentage(from, to) {
 
 export const locationServiceMiddleware = store => next => action => {
     const { dispatch } = store
+    var updator
     switch (action.type) {
         case START_LOCATION_SERVICE:
             geoWatchId = Geolocation.watchPosition((location) => {
@@ -29,15 +30,28 @@ export const locationServiceMiddleware = store => next => action => {
             },
             err => console.log(err),
             {distanceFilter: 30})
+
+            updator = setInterval(() => {
+                let state = store.getState()
+                state.peerLocations.forEach((location, uuid) => {
+                    dispatch({
+                        type: ADJUST_PEER_VOLUME,
+                        payload: {
+                            UUID: uuid,
+                            Location: location
+                        }
+                    })
+                })
+            }, 1000)
             break
         case ADJUST_PEER_VOLUME:
-
+            console.log("payload", action.payload)
             vol = determineVolumePercentage(store.getState().currentLocation, action.payload.Location)
 
-            dispatch({
-                type: UPDATE_PEER_LOCATION,
-                payload: action.payload
-            })
+            // dispatch({
+            //     type: UPDATE_PEER_LOCATION,
+            //     payload: action.payload
+            // })
             dispatch({
                 type: UPDATE_STREAM_VOLUMES,
                 payload: {
@@ -51,6 +65,7 @@ export const locationServiceMiddleware = store => next => action => {
         case STOP_LOCATION_SERVICE:
             Geolocation.clearWatch(geoWatchId)
             geoWatchId = null
+            clearInterval(updator)
             break
         default:
             next(action)

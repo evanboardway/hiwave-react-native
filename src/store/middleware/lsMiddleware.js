@@ -48,10 +48,6 @@ export const locationServiceMiddleware = store => next => action => {
             console.log("payload", action.payload)
             vol = determineVolumePercentage(store.getState().currentLocation, action.payload.Location)
 
-            // dispatch({
-            //     type: UPDATE_PEER_LOCATION,
-            //     payload: action.payload
-            // })
             dispatch({
                 type: UPDATE_STREAM_VOLUMES,
                 payload: {

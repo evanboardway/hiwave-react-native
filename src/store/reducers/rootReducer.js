@@ -25,6 +25,8 @@ export function rootReducer(state = initialState, action) {
         case WRTC_REMOVE_TRACK:
             streams = state.incomingStreams.filter(stream => stream.id != action.payload)
             return {...state, incomingStreams: streams}
+        case WRTC_DISCONNECTED:
+            return {...state, incomingStreams: new Array(), peerLocations: new Map()}
         case WRTC_ADD_STREAM:
             return {...state, incomingStreams: action.payload}
         case UPDATE_STREAM_VOLUMES:

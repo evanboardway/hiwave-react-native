@@ -1,4 +1,4 @@
-import { UPDATE_WRTC_CONNECTION_STATE, WRTC_ADD_STREAM, WSCONNECTED, WRTC_ADD_TRACK, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_CONNECTION_REQUESTED, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_REMOVE_TRACK, WRTC_RENEGOTIATE, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE, CLIENT_RESET } from "../../helpers/enums"
+import { WRTC_ADD_STREAM, WRTC_ANSWER, WRTC_CONNECT, WRTC_CONNECTED, WRTC_CONNECTING, WRTC_DISCONNECT, WRTC_DISCONNECTED, WRTC_ICE_CANDIDATE, WRTC_OFFER, WRTC_RENEGOTIATE, WRTC_UPDATE_CONNECTION_STATE, WS_SEND_MESSAGE, CLIENT_RESET, WRTC_MUTE, WRTC_SET_LOCAL_STREAM } from "../../helpers/enums"
 import {
     RTCPeerConnection,
     RTCIceCandidate,
@@ -28,6 +28,13 @@ export const webrtcMiddleware = store => next => action => {
             if (peerConnection) peerConnection.close()
             peerConnection = null
             next(action)
+            break
+        case WRTC_MUTE:
+            localStream = store.getState().localStream
+            if (localStream) {
+                localStream.getAudioTracks()[0].enabled = localStream.getAudioTracks()[0].enabled ? false : true
+                console.log(localStream.getAudioTracks())
+            }
             break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
@@ -64,9 +71,6 @@ export const webrtcMiddleware = store => next => action => {
             break
         case WRTC_RENEGOTIATE:
             console.log("renegotiating")
-            if (peerConnection.signalingState != "stable") {
-                return
-            }
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
             peerConnection.setRemoteDescription(rdesc).then(() => {
                 peerConnection.createAnswer().then(answer => {
@@ -91,6 +95,10 @@ export const webrtcMiddleware = store => next => action => {
             peerConnection = new RTCPeerConnection(configuration)
 
             mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+                dispatch({
+                    type: WRTC_SET_LOCAL_STREAM,
+                    payload: stream
+                })
                 peerConnection.addTransceiver(stream._tracks[0], {}).catch(err => console.log("TRANC ERR: ", err))
 
                 peerConnection.onicecandidate = (e) => {

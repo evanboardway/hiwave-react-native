@@ -24,6 +24,8 @@ export const WRTC_ADD_TRACK = "wrtc_add_track"
 export const WRTC_ADD_STREAM = "wrtc_add_stream"
 export const WRTC_REMOVE_TRACK = "wrtc_remove_track"
 export const WRTC_CANDIDATAE = "wrtc_candidate"
+export const WRTC_MUTE = "wrtc_mute"
+export const WRTC_SET_LOCAL_STREAM = "wrtc_set_local_stream"
 
 export const UPDATE_LOCATION = "update_location"
 export const UPDATE_PEER_LOCATION = "update_peer_location"

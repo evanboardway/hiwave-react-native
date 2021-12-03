@@ -27,6 +27,7 @@ export function rootReducer(state = initialState, action) {
             return {...state, currentLocation: action.payload}
         case UPDATE_PEER_LOCATION:
             state.peerLocations.set(action.payload.UUID, action.payload.Location)
+            console.log("peer location updated", state.peerLocations)
             return state
         case WRTC_SET_LOCAL_STREAM:
             return {...state, localStream: action.payload}

@@ -47,7 +47,6 @@ export const locationServiceMiddleware = store => next => action => {
             }
             break
         case ADJUST_PEER_VOLUME:
-            console.log("payload", action.payload)
             vol = determineVolumePercentage(store.getState().currentLocation, action.payload.Location)
 
             dispatch({

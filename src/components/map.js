@@ -8,28 +8,39 @@ const IMAGE_PIGGY = require("../assets/images/piggy.png")
 
 MapboxGL.setAccessToken('pk.eyJ1IjoidGVzc29yby0iLCJhIjoiY2t1b3EzY2d2MGV1ejJ2bzFtbXIxMmdjbCJ9.P-4uyej3lnQVxNs1Tzc-Sw');
 
-const renderPeerMarkers = (peerLocations) => {
+function RenderPeerMarkers(peerLocations) {
   let markers = []
+
   peerLocations.forEach((location, uuid) => {
 
     markers.push(
       <MapboxGL.MarkerView
-          id={uuid}
-          coordinate={location.longitude, location.latitude}>
-          <View style={styles.iconWrapper}>
-            <Image
-              source={IMAGE_PIGGY}
-              style={styles.icon}
-            />
-          </View>
-        </MapboxGL.MarkerView>
+        id={uuid}
+        key={uuid}
+        coordinate={[location.Longitude, location.Latitude]}>
+        <View style={styles.iconWrapper}>
+          <Image
+            source={IMAGE_PIGGY}
+            style={styles.icon}
+          />
+        </View>
+      </MapboxGL.MarkerView>
     )
 
   })
-  return markers
+  return (
+    <View>
+      {markers}
+    </View>
+  )
 }
 
-const Map = (props) => {
+const MapView = (props) => {
+  let markers = null
+  if (props.peerLocations) {
+    markers = RenderPeerMarkers(props.peerLocations)
+  }
+
   return (
     <View style={styles.map}>
       <MapboxGL.MapView
@@ -49,8 +60,8 @@ const Map = (props) => {
         </MapboxGL.Camera>
         <MapboxGL.UserLocation />
 
-        {renderPeerMarkers(props.peerLocations)}
 
+        {markers}
 
       </MapboxGL.MapView>
     </View>
@@ -80,7 +91,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  return { peerLocations: state.peerLocations  }
+  console.log(state)
+  let temp = new Map()
+  temp.set("dc30d3f7-a67f-429a-9623-4da1af99c7de", { "Accuracy": 65, "Altitude": 0, "AltitudeAccuracy": -1, "Heading": -1, "Latitude": 37.33240905, "Longitude": -122.03051211, "Speed": -1 })
+  return { peerLocations: temp }
 };
 const connectComponent = connect(mapStateToProps);
-export default connectComponent(Map);
+export default connectComponent(MapView);

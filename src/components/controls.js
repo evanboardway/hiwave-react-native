@@ -22,29 +22,32 @@ const ControlsView = (props) => {
     }
     return (
         <View style={styles.controlsContainer}>
-            <TouchableOpacity
-                onPress={() => {
-                    if (props.wrtcConnectionState == WRTC_CONNECTED) {
-                        props.dispatch({
-                            type: WRTC_DISCONNECT
-                        })
-                    } else {
-                        props.dispatch({
-                            type: WRTC_CONNECT
-                        })
-                    }
-                }}
-                disabled={disabled}>
-                <View style={styles.buttonContainer}>
-                    <Image style={styles.image} source={title == 'CONNECT' ? require('../assets/images/connect.png') : require('../assets/images/disconnect.png')} />
-                </View>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.iconBacking}>
-                <View style={styles.selectIconContainer}>
+            <TouchableOpacity>
+                <View style={styles.buttonContainer}>
                     <Image style={styles.image} source={require('../assets/images/bike.png')} />
                 </View>
             </TouchableOpacity>
+
+            <View style={styles.iconBacking}>
+                <TouchableOpacity
+                    onPress={() => {
+                        if (props.wrtcConnectionState == WRTC_CONNECTED) {
+                            props.dispatch({
+                                type: WRTC_DISCONNECT
+                            })
+                        } else {
+                            props.dispatch({
+                                type: WRTC_CONNECT
+                            })
+                        }
+                    }}
+                    disabled={disabled}>
+                    <View style={styles.selectIconContainer}>
+                        <Image style={styles.image} source={title == 'CONNECT' ? require('../assets/images/connect.png') : require('../assets/images/disconnect.png')} />
+                    </View>
+                </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
                 onPress={() => {
@@ -54,7 +57,7 @@ const ControlsView = (props) => {
                 }}
                 disabled={title == 'DISCONNECT' ? false : true}
             >
-                <View color={'white'} style={styles.buttonContainer}>
+                <View style={styles.buttonContainer}>
                     <Image style={styles.image} source={props.muted ? require('../assets/images/muted.png') : require('../assets/images/unmuted.png')} />
                 </View>
             </TouchableOpacity>

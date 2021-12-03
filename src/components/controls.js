@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
 import { Button, Text, View, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT, WRTC_MUTE } from '../helpers/enums';
+import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME, MAPBOX_THEME, CONTROLS_THEME, CONTROLS_BUTTON, RED_ACCENT } from '../assets/themes';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 function RenderSelectableAvatar (props) {
-    console.log(props.selectableAvatarMenuHidden)
-
     if (props.selectableAvatarMenuHidden) {
         return null
     } else {
@@ -54,15 +52,14 @@ const ControlsView = (props) => {
     return (
         <View style={styles.navigationContainer}>
 
-            <RenderSelectableAvatar selectableAvatarMenuHidden={false}/>
+            <RenderSelectableAvatar selectableAvatarMenuHidden={props.selectableAvatarMenuHidden}/>
 
             <View style={styles.controlsContainer}>
 
                 <TouchableOpacity
                     onPress={() => {
                         props.dispatch({
-                            type: WS_SEND_MESSAGE,
-                            payload: "voice"
+                            type: TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN
                         })
                     }}>
                     <View style={styles.buttonContainer}>
@@ -181,7 +178,8 @@ const mapStateToProps = (state) => {
     return {
         wsConnectionState: state.wsConnectionState,
         wrtcConnectionState: state.wrtcConnectionState,
-        muted: state.muted
+        muted: state.muted,
+        selectableAvatarMenuHidden: state.selectableAvatarMenuHidden
     }
 };
 const connectComponent = connect(mapStateToProps);

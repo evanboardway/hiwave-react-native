@@ -35,3 +35,6 @@ export const PEER_LOCATION = "peer_location"
 
 export const ADJUST_PEER_VOLUME = "adjust_peer_volume"
 export const UPDATE_STREAM_VOLUMES = "update_stream_volumes"
+
+export const SELECTABLE_AVATAR_MENU_HIDDEN = "selectable_avatar_menu_hidden"
+export const TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN = "toggle_selectable_avatar_menu_hidden"

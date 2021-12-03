@@ -3,12 +3,7 @@ import {
     RTCPeerConnection,
     RTCIceCandidate,
     RTCSessionDescription,
-    RTCIceCandidateType,
-    RTCView,
-    MediaStream,
-    MediaStreamTrack,
     mediaDevices,
-    registerGlobals
 } from 'react-native-webrtc'
 
 
@@ -33,8 +28,8 @@ export const webrtcMiddleware = store => next => action => {
             localStream = store.getState().localStream
             if (localStream) {
                 localStream.getAudioTracks()[0].enabled = localStream.getAudioTracks()[0].enabled ? false : true
-                console.log(localStream.getAudioTracks())
             }
+            next(action)
             break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()

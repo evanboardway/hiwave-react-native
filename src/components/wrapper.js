@@ -5,7 +5,7 @@ import { ORIENTATION_CHANGE, WSCONNECTING, WSFAILED } from '../helpers/enums'
 import MapView from './map';
 import ControlsView from './controls'
 import StreamRenderer from './streamRenderer'
-import { DARK_THEME, MAPBOX_THEME } from '../assets/themes';
+import { CONTROLS_THEME, DARK_THEME, MAPBOX_THEME } from '../assets/themes';
 import { Dimensions } from 'react-native';
 
 
@@ -72,15 +72,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     controls: {
-        flex: 1,
         backgroundColor: MAPBOX_THEME,
-        opacity: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%'
+        width: '70%',
     },
     map: {
-        flex: 5,
+        flex: 10,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%'
@@ -91,7 +87,7 @@ const styles = StyleSheet.create({
     connectedUserCountPortrait: {
         position: 'absolute',
         zIndex: 999,
-        backgroundColor: 'rgba(0,0,0, 0.8)',
+        backgroundColor: CONTROLS_THEME,
         alignItems: 'center',
         justifyContent: 'center',
         top: 60,

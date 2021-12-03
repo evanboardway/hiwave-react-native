@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
+import { Button, Text, View, StyleSheet, Image } from 'react-native';
+import { connect } from 'react-redux';
 import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT, WRTC_MUTE } from '../helpers/enums';
-import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME } from '../assets/themes';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
+import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME, MAPBOX_THEME, CONTROLS_THEME, CONTROLS_BUTTON, RED_ACCENT } from '../assets/themes';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const ControlsView = (props) => {
     let title
@@ -23,105 +22,88 @@ const ControlsView = (props) => {
     }
     return (
         <View style={styles.controlsContainer}>
-            <View style={styles.secondaryControlsContainer}>
-                <View style={styles.voxBut}>
-                    <Button
-                        title={"VOICE"}
-                        color='rgba(255, 255, 255, 0.7)'
-                        onPress={() => {
-                            props.dispatch({
-                                type: WS_SEND_MESSAGE,
-                                payload: {
-                                    event: "voice"
-                                }
-                            })
-                        }}
-                    />
+            <TouchableOpacity
+                onPress={() => {
+                    if (props.wrtcConnectionState == WRTC_CONNECTED) {
+                        props.dispatch({
+                            type: WRTC_DISCONNECT
+                        })
+                    } else {
+                        props.dispatch({
+                            type: WRTC_CONNECT
+                        })
+                    }
+                }}
+                disabled={disabled}>
+                <View style={styles.buttonContainer}>
+                    <Image style={styles.image} source={title == 'CONNECT' ? require('../assets/images/connect.png') : require('../assets/images/disconnect.png')} />
                 </View>
+            </TouchableOpacity>
 
-                <View style={styles.muteBut}>
-                    <Button
-                        title={"MUTE"}
-                        color='rgba(255, 255, 255, 0.7)'
-                        onPress={() => {
-                            props.dispatch({
-                                type: WRTC_MUTE
-                            })
-                        }}
-                    />
+            <TouchableOpacity style={styles.iconBacking}>
+                <View style={styles.selectIconContainer}>
+                    <Image style={styles.image} source={require('../assets/images/bike.png')} />
                 </View>
+            </TouchableOpacity>
 
-            </View>
-            <View style={styles.conButton}>
-                <Button
-                    onPress={() => {
-                        if (props.wrtcConnectionState == WRTC_CONNECTED) {
-                            props.dispatch({
-                                type: WRTC_DISCONNECT
-                            })
-                        } else {
-                            props.dispatch({
-                                type: WRTC_CONNECT
-                            })
-                        }
-                    }}
-                    title={title}
-                    color='rgba(255, 255, 255, 0.7)'
-                    disabled={disabled}
-                />
-            </View>
+            <TouchableOpacity
+                onPress={() => {
+                    props.dispatch({
+                        type: WRTC_MUTE
+                    })
+                }}
+                disabled={title == 'DISCONNECT' ? false : true}
+            >
+                <View color={'white'} style={styles.buttonContainer}>
+                    <Image style={styles.image} source={props.muted ? require('../assets/images/muted.png') : require('../assets/images/unmuted.png')} />
+                </View>
+            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    voxBut: {
-        backgroundColor: BUTTON_ACCENT,
-        marginVertical: 7,
-        marginLeft: 7,
-        borderRadius: 10,
-        borderBottomEndRadius: 100,
-        shadowRadius: 20,
-        shadowOpacity: 0.3,
-        flex: 1,
-        flexGrow: 1,
-        justifyContent: 'center'
-    },
-    muteBut: {
-        backgroundColor: BUTTON_ACCENT,
-        marginVertical: 7,
-        marginRight: 7,
-        borderRadius: 10,
-        borderTopStartRadius: 100,
-        shadowRadius: 20,
-        shadowOpacity: 0.3,
-        flex: 1,
-        flexGrow: 1,
-        justifyContent: 'center'
-    },
-    conButton: {
-        backgroundColor: BUTTON_ACCENT,
-        margin: 7,
-        borderTopEndRadius: 10,
-        borderTopStartRadius: 10,
-        borderBottomEndRadius: 40,
-        borderBottomStartRadius: 40,
-        shadowRadius: 20,
-        shadowOpacity: 0.3,
-        flex: 1,
-        flexGrow: 1,
-        justifyContent: 'center'
-    },
     controlsContainer: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-        width: '100%'
-    },
-    secondaryControlsContainer: {
-        flex: 1,
+        backgroundColor: CONTROLS_THEME,
+        borderRadius: 20,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 35,
+        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        height: 60
+    },
+    buttonContainer: {
+        backgroundColor: CONTROLS_BUTTON,
+        borderRadius: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+    },
+    selectIconContainer: {
+        backgroundColor: RED_ACCENT,
+        borderRadius: 50,
+        padding: 20,
+        borderWidth: 4,
+        borderColor: 'rgba(255, 255, 255, 0.2)'
+    },
+    image: {
+        height: 25,
+        width: 25,
+        opacity: 1,
+        resizeMode: 'contain',
+    },
+    buttonText: {
+        color: RED_ACCENT,
+        fontSize: 8
+    },
+    iconBacking: {
+        backgroundColor: CONTROLS_THEME,
+        padding: 10,
+        borderRadius: 50,
     }
 })
 
@@ -129,6 +111,7 @@ const mapStateToProps = (state) => {
     return {
         wsConnectionState: state.wsConnectionState,
         wrtcConnectionState: state.wrtcConnectionState,
+        muted: state.muted
     }
 };
 const connectComponent = connect(mapStateToProps);

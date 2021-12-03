@@ -38,3 +38,17 @@ export const UPDATE_STREAM_VOLUMES = "update_stream_volumes"
 
 export const SELECTABLE_AVATAR_MENU_HIDDEN = "selectable_avatar_menu_hidden"
 export const TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN = "toggle_selectable_avatar_menu_hidden"
+export const UPDATE_AVATAR = "update_avatar"
+export const CURRENT_AVATAR = "current_avatar"
+export const SET_CURRENT_AVATAR = "set_current_avatar"
+
+export const AVATAR_BIKE = "bike.png"
+export const AVATAR_SNOWMOBILE = "snowmobile.png"
+export const AVATAR_MOTORCYCLE = "motorcycle.png"
+export const AVATAR_SCOOTER = "scooter.png"
+export const AVATAR_MOPED = "moped.png"
+export const AVATAR_PIGGY = "piggy.png"
+
+
+
+

@@ -1,9 +1,35 @@
 import React, { useContext } from 'react';
 import { Button, Text, View, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
+import { UPDATE_AVATAR, AVATAR_BIKE, AVATAR_MOPED, AVATAR_MOTORCYCLE, AVATAR_SCOOTER, AVATAR_PIGGY, AVATAR_SNOWMOBILE, WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME, MAPBOX_THEME, CONTROLS_THEME, CONTROLS_BUTTON, RED_ACCENT } from '../assets/themes';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
+const IMAGE_BIKE = require("../assets/images/bike.png")
+const IMAGE_SNOWMOBILE = require("../assets/images/snowmobile.png")
+const IMAGE_MOTORCYCLE = require("../assets/images/motorcycle.png")
+const IMAGE_SCOOTER = require("../assets/images/scooter.png")
+const IMAGE_MOPED = require("../assets/images/moped.png")
+const IMAGE_PIGGY = require("../assets/images/piggy.png")
+
+function avatarToImage(avatar) {
+    switch(avatar) {
+        case AVATAR_BIKE:
+            return IMAGE_BIKE
+        case AVATAR_MOPED:
+            return IMAGE_MOPED
+        case AVATAR_MOTORCYCLE:
+            return IMAGE_MOTORCYCLE
+        case AVATAR_PIGGY:
+            return IMAGE_PIGGY
+        case AVATAR_SCOOTER:
+            return IMAGE_SCOOTER
+        case AVATAR_SNOWMOBILE:
+            return IMAGE_SNOWMOBILE
+        default:
+            return IMAGE_BIKE
+    }
+}
 
 function RenderSelectableAvatar (props) {
     if (props.selectableAvatarMenuHidden) {
@@ -11,23 +37,65 @@ function RenderSelectableAvatar (props) {
     } else {
         return (
             <View style={styles.iconSelectorContainer}>
-                <TouchableOpacity style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={require('../assets/images/bike.png')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: UPDATE_AVATAR,
+                            payload: AVATAR_BIKE
+                        })
+                    }}
+                    style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={IMAGE_BIKE} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={require('../assets/images/snowmobile.png')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: UPDATE_AVATAR,
+                            payload: AVATAR_SNOWMOBILE
+                        })
+                    }}
+                    style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={IMAGE_SNOWMOBILE} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={require('../assets/images/motorcycle.png')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: UPDATE_AVATAR,
+                            payload: AVATAR_MOTORCYCLE
+                        })
+                    }}
+                    style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={IMAGE_MOTORCYCLE} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={require('../assets/images/scooter.png')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: UPDATE_AVATAR,
+                            payload: AVATAR_SCOOTER
+                        })
+                    }}
+                    style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={IMAGE_SCOOTER} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={require('../assets/images/moped.png')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: UPDATE_AVATAR,
+                            payload: AVATAR_MOPED
+                        })
+                    }}
+                    style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={IMAGE_MOPED} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={require('../assets/images/piggy.png')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: UPDATE_AVATAR,
+                            payload: AVATAR_PIGGY
+                        })
+                    }}
+                    style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={IMAGE_PIGGY} />
                 </TouchableOpacity>
             </View>
         )
@@ -52,7 +120,7 @@ const ControlsView = (props) => {
     return (
         <View style={styles.navigationContainer}>
 
-            <RenderSelectableAvatar selectableAvatarMenuHidden={props.selectableAvatarMenuHidden}/>
+            <RenderSelectableAvatar selectableAvatarMenuHidden={props.selectableAvatarMenuHidden} dispatch={props.dispatch}/>
 
             <View style={styles.controlsContainer}>
 
@@ -63,7 +131,7 @@ const ControlsView = (props) => {
                         })
                     }}>
                     <View style={styles.buttonContainer}>
-                        <Image style={styles.image} source={require('../assets/images/bike.png')} />
+                        <Image style={styles.image} source={avatarToImage(props.currentAvatar)} />
                     </View>
                 </TouchableOpacity>
 
@@ -179,7 +247,8 @@ const mapStateToProps = (state) => {
         wsConnectionState: state.wsConnectionState,
         wrtcConnectionState: state.wrtcConnectionState,
         muted: state.muted,
-        selectableAvatarMenuHidden: state.selectableAvatarMenuHidden
+        selectableAvatarMenuHidden: state.selectableAvatarMenuHidden,
+        currentAvatar: state.currentAvatar
     }
 };
 const connectComponent = connect(mapStateToProps);

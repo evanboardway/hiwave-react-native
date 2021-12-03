@@ -5,6 +5,37 @@ import { WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, 
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME, MAPBOX_THEME, CONTROLS_THEME, CONTROLS_BUTTON, RED_ACCENT } from '../assets/themes';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
+function RenderSelectableAvatar (props) {
+    console.log(props.selectableAvatarMenuHidden)
+
+    if (props.selectableAvatarMenuHidden) {
+        return null
+    } else {
+        return (
+            <View style={styles.iconSelectorContainer}>
+                <TouchableOpacity style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={require('../assets/images/bike.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={require('../assets/images/snowmobile.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={require('../assets/images/motorcycle.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={require('../assets/images/scooter.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={require('../assets/images/moped.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.selectIconButtonContainer}>
+                    <Image style={styles.iconImage} source={require('../assets/images/piggy.png')} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+}
+
 const ControlsView = (props) => {
     let title
     let disabled = false
@@ -21,58 +52,84 @@ const ControlsView = (props) => {
             break
     }
     return (
-        <View style={styles.controlsContainer}>
+        <View style={styles.navigationContainer}>
 
-            <TouchableOpacity>
-                <View style={styles.buttonContainer}>
-                    <Image style={styles.image} source={require('../assets/images/bike.png')} />
-                </View>
-            </TouchableOpacity>
+            <RenderSelectableAvatar selectableAvatarMenuHidden={false}/>
 
-            <View style={styles.iconBacking}>
+            <View style={styles.controlsContainer}>
+
                 <TouchableOpacity
                     onPress={() => {
-                        if (props.wrtcConnectionState == WRTC_CONNECTED) {
-                            props.dispatch({
-                                type: WRTC_DISCONNECT
-                            })
-                        } else {
-                            props.dispatch({
-                                type: WRTC_CONNECT
-                            })
-                        }
+                        props.dispatch({
+                            type: WS_SEND_MESSAGE,
+                            payload: "voice"
+                        })
+                    }}>
+                    <View style={styles.buttonContainer}>
+                        <Image style={styles.image} source={require('../assets/images/bike.png')} />
+                    </View>
+                </TouchableOpacity>
+
+                <View style={styles.iconBacking}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (props.wrtcConnectionState == WRTC_CONNECTED) {
+                                props.dispatch({
+                                    type: WRTC_DISCONNECT
+                                })
+                            } else {
+                                props.dispatch({
+                                    type: WRTC_CONNECT
+                                })
+                            }
+                        }}
+                        disabled={disabled}>
+                        <View style={styles.connectButtonContainer}>
+                            <Image style={styles.image} source={title == 'CONNECT' ? require('../assets/images/connect.png') : require('../assets/images/disconnect.png')} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity
+                    onPress={() => {
+                        props.dispatch({
+                            type: WRTC_MUTE
+                        })
                     }}
-                    disabled={disabled}>
-                    <View style={styles.selectIconContainer}>
-                        <Image style={styles.image} source={title == 'CONNECT' ? require('../assets/images/connect.png') : require('../assets/images/disconnect.png')} />
+                    disabled={title == 'DISCONNECT' ? false : true}
+                >
+                    <View style={styles.buttonContainer}>
+                        <Image style={styles.image} source={props.muted ? require('../assets/images/muted.png') : require('../assets/images/unmuted.png')} />
                     </View>
                 </TouchableOpacity>
             </View>
-
-            <TouchableOpacity
-                onPress={() => {
-                    props.dispatch({
-                        type: WRTC_MUTE
-                    })
-                }}
-                disabled={title == 'DISCONNECT' ? false : true}
-            >
-                <View style={styles.buttonContainer}>
-                    <Image style={styles.image} source={props.muted ? require('../assets/images/muted.png') : require('../assets/images/unmuted.png')} />
-                </View>
-            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    controlsContainer: {
+    navigationContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         backgroundColor: CONTROLS_THEME,
         borderRadius: 20,
+        bottom: 60,
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 35,
+    },
+    iconSelectorContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        padding: 10,
+        marginBottom: 10
+    },
+    controlsContainer: {
+        backgroundColor: CONTROLS_THEME,
+        borderRadius: 20,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -86,7 +143,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10,
     },
-    selectIconContainer: {
+    selectIconButtonContainer: {
+        padding: 10,
+        margin: 4,
+    },
+    connectButtonContainer: {
         backgroundColor: RED_ACCENT,
         borderRadius: 50,
         padding: 20,
@@ -96,6 +157,12 @@ const styles = StyleSheet.create({
     image: {
         height: 25,
         width: 25,
+        opacity: 1,
+        resizeMode: 'contain',
+    },
+    iconImage: {
+        height: 40,
+        width: 40,
         opacity: 1,
         resizeMode: 'contain',
     },

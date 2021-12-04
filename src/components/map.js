@@ -10,6 +10,7 @@ MapboxGL.setAccessToken('pk.eyJ1IjoidGVzc29yby0iLCJhIjoiY2t1b3EzY2d2MGV1ejJ2bzFt
 
 function RenderPeerMarkers(peerLocations) {
   let markers = []
+  console.log("rerender map", peerLocations)
 
   peerLocations.forEach((location, uuid) => {
 
@@ -91,10 +92,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log(state)
-  let temp = new Map()
-  temp.set("dc30d3f7-a67f-429a-9623-4da1af99c7de", { "Accuracy": 65, "Altitude": 0, "AltitudeAccuracy": -1, "Heading": -1, "Latitude": 37.33240905, "Longitude": -122.03051211, "Speed": -1 })
-  return { peerLocations: temp }
+  // let temp = new Map()
+  // temp.set("dc30d3f7-a67f-429a-9623-4da1af99c7de", { "Accuracy": 65, "Altitude": 0, "AltitudeAccuracy": -1, "Heading": -1, "Latitude": 37.33240905, "Longitude": -122.03051211, "Speed": -1 })
+  return { peerLocations: state.peerLocations }
 };
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(MapView);

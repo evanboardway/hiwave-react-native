@@ -125,9 +125,8 @@ const mapStateToProps = (state) => {
     return {
         wsConnectionState: state.wsConnectionState,
         orientation: state.orientation,
-        userCount: state.incomingStreams.length
+        userCount: state.incomingStreams ? state.incomingStreams.length : 0
     }
 };
-const mapDispatchToProps = dispatch => ({});
 const connectComponent = connect(mapStateToProps);
 export default connectComponent(HomeWrapper);

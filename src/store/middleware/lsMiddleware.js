@@ -34,15 +34,17 @@ export const locationServiceMiddleware = store => next => action => {
     
                 updator = setInterval(() => {
                     let state = store.getState()
-                    state.peerLocations.forEach((location, uuid) => {
-                        dispatch({
-                            type: ADJUST_PEER_VOLUME,
-                            payload: {
-                                UUID: uuid,
-                                Location: location
-                            }
+                    if (state.peerLocations) {
+                        state.peerLocations.forEach((location, uuid) => {
+                            dispatch({
+                                type: ADJUST_PEER_VOLUME,
+                                payload: {
+                                    UUID: uuid,
+                                    Location: location
+                                }
+                            })
                         })
-                    })
+                    }
                 }, 1000)
             }
             break

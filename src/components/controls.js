@@ -39,9 +39,15 @@ function RenderSelectableAvatar (props) {
             <View style={styles.iconSelectorContainer}>
                 <TouchableOpacity
                     onPress={() => {
+                        // props.dispatch({
+                        //     type: UPDATE_AVATAR,
+                        //     payload: AVATAR_BIKE
+                        // })
                         props.dispatch({
-                            type: UPDATE_AVATAR,
-                            payload: AVATAR_BIKE
+                            type: WS_SEND_MESSAGE,
+                            payload: {
+                                event: "voice"
+                            }
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
@@ -49,9 +55,15 @@ function RenderSelectableAvatar (props) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
+                        // props.dispatch({
+                        //     type: UPDATE_AVATAR,
+                        //     payload: AVATAR_SNOWMOBILE
+                        // })
                         props.dispatch({
-                            type: UPDATE_AVATAR,
-                            payload: AVATAR_SNOWMOBILE
+                            type: WS_SEND_MESSAGE,
+                            payload: {
+                                event: "mute"
+                            }
                         })
                     }}
                     style={styles.selectIconButtonContainer}>

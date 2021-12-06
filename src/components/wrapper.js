@@ -38,7 +38,7 @@ const HomeWrapper = (props) => {
                         <Text style={styles.connectedUserCount}>{props.userCount}</Text>
                     </View>
                     <View style={styles.map}>
-                        <MapViewAlt></MapViewAlt>
+                        <MapView></MapView>
                     </View>
                     <View style={styles.streamRenderer}>
                         <StreamRenderer></StreamRenderer>

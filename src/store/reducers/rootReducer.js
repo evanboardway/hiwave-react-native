@@ -19,7 +19,7 @@ export function rootReducer(state = initialState, action) {
             console.log("TRIGGERED PEER LOX", state.peerLocations)
             return state
         case CLIENT_RESET:
-            return { ...state, incomingStreams: new Array(), peerLocations: new Map(), currentLocation: new Map(), muted: false, selectableAvatarMenuHidden: true }
+            return { ...state, incomingStreams: new Array(), peerLocations: new Array(), currentLocation: new Map(), muted: false, selectableAvatarMenuHidden: true }
         case ORIENTATION_CHANGE:
             return { ...state, orientation: action.payload }
         case UPDATE_WSCONNECTIONSTATE:
@@ -29,14 +29,13 @@ export function rootReducer(state = initialState, action) {
         case UPDATE_LOCATION:
             return { ...state, currentLocation: action.payload }
         case UPDATE_PEER_LOCATION:
-            return {
-                ...state, peerLocations: state.peerLocations.push(
-                    {
-                        UUID: action.payload.UUID,
-                        location: action.payload.Location
-                    }
-                )
-            }
+            locations = state.peerLocations.filter(location => location.id != action.payload.UUID)
+
+            locations.push({
+                id: action.payload.UUID,
+                location: action.payload.Location
+            })
+            return {...state, peerLocations: locations}
         case WRTC_SET_LOCAL_STREAM:
             return { ...state, localStream: action.payload }
         case WRTC_ADD_STREAM:
@@ -44,8 +43,8 @@ export function rootReducer(state = initialState, action) {
             return state
         case WRTC_REMOVE_STREAM:
             streams = state.incomingStreams.filter(stream => stream.id != action.payload)
-            state.peerLocations.delete(action.payload)
-            return { ...state, incomingStreams: streams }
+            locations = state.peerLocations.filter(location => location.id != action.payload)
+            return { ...state, incomingStreams: streams, peerLocations: locations }
         case WRTC_DISCONNECTED:
             return { ...state, incomingStreams: new Array(), peerLocations: new Map() }
         case UPDATE_STREAM_VOLUMES:

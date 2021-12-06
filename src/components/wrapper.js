@@ -7,6 +7,7 @@ import ControlsView from './controls'
 import StreamRenderer from './streamRenderer'
 import { CONTROLS_THEME, DARK_THEME, MAPBOX_THEME } from '../assets/themes';
 import { Dimensions } from 'react-native';
+import MapViewAlt from './mapalt'
 
 
 const isPortrait = () => {
@@ -37,7 +38,7 @@ const HomeWrapper = (props) => {
                         <Text style={styles.connectedUserCount}>{props.userCount}</Text>
                     </View>
                     <View style={styles.map}>
-                        <MapView></MapView>
+                        <MapViewAlt></MapViewAlt>
                     </View>
                     <View style={styles.streamRenderer}>
                         <StreamRenderer></StreamRenderer>

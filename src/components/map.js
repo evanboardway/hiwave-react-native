@@ -10,7 +10,6 @@ MapboxGL.setAccessToken('pk.eyJ1IjoidGVzc29yby0iLCJhIjoiY2t1b3EzY2d2MGV1ejJ2bzFt
 
 
 const MapView = (props) => {
-  console.log("Mapview update")
   return (
     <View style={styles.map}>
       <MapboxGL.MapView
@@ -43,8 +42,6 @@ const MapView = (props) => {
             </View>
           </MapboxGL.MarkerView>)
         })}
-
-
 
       </MapboxGL.MapView>
     </View>

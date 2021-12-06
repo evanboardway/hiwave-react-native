@@ -1,35 +1,11 @@
 import React, { useContext } from 'react';
 import { Button, Text, View, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { UPDATE_AVATAR, AVATAR_BIKE, AVATAR_MOPED, AVATAR_MOTORCYCLE, AVATAR_SCOOTER, AVATAR_PIGGY, AVATAR_SNOWMOBILE, WRTC_CONNECTION_REQUESTED, WSCONNECTED, WS_SEND_MESSAGE, WSCONNECTING, WSFAILED, WRTC_CONNECTING, WRTC_ADD_TRACK, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_UPDATE_CONNECTION_STATE, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
+import { UPDATE_AVATAR, AVATAR_MOPED, AVATAR_PIGGY, WS_SEND_MESSAGE, WRTC_CONNECTING, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME, MAPBOX_THEME, CONTROLS_THEME, CONTROLS_BUTTON, RED_ACCENT } from '../assets/themes';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import * as Avatars from '../helpers/avatars'
 
-const IMAGE_BIKE = require("../assets/images/bike.png")
-const IMAGE_SNOWMOBILE = require("../assets/images/snowmobile.png")
-const IMAGE_MOTORCYCLE = require("../assets/images/motorcycle.png")
-const IMAGE_SCOOTER = require("../assets/images/scooter.png")
-const IMAGE_MOPED = require("../assets/images/moped.png")
-const IMAGE_PIGGY = require("../assets/images/piggy.png")
-
-function avatarToImage(avatar) {
-    switch(avatar) {
-        case AVATAR_BIKE:
-            return IMAGE_BIKE
-        case AVATAR_MOPED:
-            return IMAGE_MOPED
-        case AVATAR_MOTORCYCLE:
-            return IMAGE_MOTORCYCLE
-        case AVATAR_PIGGY:
-            return IMAGE_PIGGY
-        case AVATAR_SCOOTER:
-            return IMAGE_SCOOTER
-        case AVATAR_SNOWMOBILE:
-            return IMAGE_SNOWMOBILE
-        default:
-            return IMAGE_BIKE
-    }
-}
 
 function RenderSelectableAvatar (props) {
     if (props.selectableAvatarMenuHidden) {
@@ -51,7 +27,7 @@ function RenderSelectableAvatar (props) {
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={IMAGE_BIKE} />
+                    <Image style={styles.iconImage} source={Avatars.IMAGE_BIKE} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
@@ -67,7 +43,7 @@ function RenderSelectableAvatar (props) {
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={IMAGE_SNOWMOBILE} />
+                    <Image style={styles.iconImage} source={Avatars.IMAGE_SNOWMOBILE} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
@@ -80,7 +56,7 @@ function RenderSelectableAvatar (props) {
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={IMAGE_MOTORCYCLE} />
+                    <Image style={styles.iconImage} source={Avatars.IMAGE_MOTORCYCLE} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
@@ -90,7 +66,7 @@ function RenderSelectableAvatar (props) {
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={IMAGE_SCOOTER} />
+                    <Image style={styles.iconImage} source={Avatars.IMAGE_SCOOTER} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
@@ -100,7 +76,7 @@ function RenderSelectableAvatar (props) {
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={IMAGE_MOPED} />
+                    <Image style={styles.iconImage} source={Avatars.IMAGE_MOPED} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
@@ -110,7 +86,7 @@ function RenderSelectableAvatar (props) {
                         })
                     }}
                     style={styles.selectIconButtonContainer}>
-                    <Image style={styles.iconImage} source={IMAGE_PIGGY} />
+                    <Image style={styles.iconImage} source={Avatars.IMAGE_PIGGY} />
                 </TouchableOpacity>
             </View>
         )
@@ -146,7 +122,7 @@ const ControlsView = (props) => {
                         })
                     }}>
                     <View style={styles.buttonContainer}>
-                        <Image style={styles.image} source={avatarToImage(props.currentAvatar)} />
+                        <Image style={styles.image} source={Avatars.AvatarToImage(props.currentAvatar)} />
                     </View>
                 </TouchableOpacity>
 

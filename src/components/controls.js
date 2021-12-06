@@ -71,9 +71,12 @@ function RenderSelectableAvatar (props) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
+                        // props.dispatch({
+                        //     type: UPDATE_AVATAR,
+                        //     payload: AVATAR_MOTORCYCLE
+                        // })
                         props.dispatch({
-                            type: UPDATE_AVATAR,
-                            payload: AVATAR_MOTORCYCLE
+                            type: "test"
                         })
                     }}
                     style={styles.selectIconButtonContainer}>

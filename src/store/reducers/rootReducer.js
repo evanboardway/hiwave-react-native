@@ -5,7 +5,7 @@ const initialState = {
     wsConnectionState: WSCONNECTING,
     wrtcConnectionState: WRTC_DISCONNECTED,
     currentLocation: new Map(),
-    peerLocations: new Map(),
+    peerLocations: new Array(),
     localStream: null,
     incomingStreams: new Array(),
     muted: false,
@@ -15,6 +15,9 @@ const initialState = {
 
 export function rootReducer(state = initialState, action) {
     switch (action.type) {
+        case "test":
+            console.log("TRIGGERED PEER LOX", state.peerLocations)
+            return state
         case CLIENT_RESET:
             return { ...state, incomingStreams: new Array(), peerLocations: new Map(), currentLocation: new Map(), muted: false, selectableAvatarMenuHidden: true }
         case ORIENTATION_CHANGE:
@@ -26,13 +29,17 @@ export function rootReducer(state = initialState, action) {
         case UPDATE_LOCATION:
             return { ...state, currentLocation: action.payload }
         case UPDATE_PEER_LOCATION:
-            lox = state.peerLocations.set(action.payload.UUID, action.payload.Location)
-            console.log(lox)
-            return { ...state, peerLocations: lox }
+            return {
+                ...state, peerLocations: state.peerLocations.push(
+                    {
+                        UUID: action.payload.UUID,
+                        location: action.payload.Location
+                    }
+                )
+            }
         case WRTC_SET_LOCAL_STREAM:
             return { ...state, localStream: action.payload }
         case WRTC_ADD_STREAM:
-            console.log("Add stream", action.payload)
             state.incomingStreams.push(action.payload)
             return state
         case WRTC_REMOVE_STREAM:

@@ -35,12 +35,12 @@ export const locationServiceMiddleware = store => next => action => {
                 updator = setInterval(() => {
                     let state = store.getState()
                     if (state.peerLocations) {
-                        state.peerLocations.forEach((location, uuid) => {
+                        state.peerLocations.forEach((peerLocation) => {
                             dispatch({
                                 type: ADJUST_PEER_VOLUME,
                                 payload: {
-                                    UUID: uuid,
-                                    Location: location
+                                    id: peerLocation.id,
+                                    location: peerLocation.location
                                 }
                             })
                         })
@@ -49,13 +49,13 @@ export const locationServiceMiddleware = store => next => action => {
             }
             break
         case ADJUST_PEER_VOLUME:
-            vol = determineVolumePercentage(store.getState().currentLocation, action.payload.Location)
-
+            vol = determineVolumePercentage(store.getState().currentLocation, action.payload.location)
+            console.log("Location", action.payload.location)
             dispatch({
                 type: UPDATE_STREAM_VOLUMES,
                 payload: {
-                    UUID: action.payload.UUID,
-                    Volume: vol
+                    id: action.payload.id,
+                    volume: vol
                 }
             })
 

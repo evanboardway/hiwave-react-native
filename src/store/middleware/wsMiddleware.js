@@ -1,4 +1,4 @@
-import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, WRTC_REMOVE_TRACK, ADJUST_PEER_VOLUME, WRTC_CANDIDATAE, WRTC_FAILED, CLIENT_RESET } from "../../helpers/enums";
+import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, ADJUST_PEER_VOLUME, WRTC_CANDIDATAE, WRTC_FAILED, CLIENT_RESET, WRTC_REMOVE_STREAM } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -10,8 +10,8 @@ export const websocketMiddleware = store => next => action => {
 
     switch (action.type) {
         case WSCONNECT:
-            socket = new WebSocket("ws://192.168.4.25:5000/websocket")
-            // socket = new WebSocket("ws://localhost:5000/websocket")
+            // socket = new WebSocket("ws://192.168.4.25:5000/websocket")
+            socket = new WebSocket("ws://localhost:5000/websocket")
 
             socket.onopen = () => {
                 clearTimeout(connectionInterval)
@@ -54,9 +54,9 @@ export const websocketMiddleware = store => next => action => {
                             type: WRTC_DISCONNECT
                         })
                         break
-                    case WRTC_REMOVE_TRACK:
+                    case WRTC_REMOVE_STREAM:
                         dispatch({
-                            type: WRTC_REMOVE_TRACK,
+                            type: WRTC_REMOVE_STREAM,
                             payload: message.data
                         })
                         break

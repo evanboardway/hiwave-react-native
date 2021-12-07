@@ -3,12 +3,7 @@ import {
     RTCPeerConnection,
     RTCIceCandidate,
     RTCSessionDescription,
-    RTCIceCandidateType,
-    RTCView,
-    MediaStream,
-    MediaStreamTrack,
     mediaDevices,
-    registerGlobals
 } from 'react-native-webrtc'
 
 
@@ -33,8 +28,8 @@ export const webrtcMiddleware = store => next => action => {
             localStream = store.getState().localStream
             if (localStream) {
                 localStream.getAudioTracks()[0].enabled = localStream.getAudioTracks()[0].enabled ? false : true
-                console.log(localStream.getAudioTracks())
             }
+            next(action)
             break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
@@ -56,10 +51,10 @@ export const webrtcMiddleware = store => next => action => {
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))
             peerConnection.setRemoteDescription(rdesc).catch(err => {
-                console.log(err.message),
-                    dispatch({
-                        type: WRTC_DISCONNECT
-                    })
+                console.log(err.message)
+                dispatch({
+                    type: WRTC_DISCONNECT
+                })
             })
             break
         case WRTC_ICE_CANDIDATE:
@@ -118,7 +113,7 @@ export const webrtcMiddleware = store => next => action => {
                     e.stream.setVolume(0)
                     dispatch({
                         type: WRTC_ADD_STREAM,
-                        payload: e.currentTarget._remoteStreams
+                        payload: e.stream
                     })
                 }
 

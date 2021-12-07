@@ -51,7 +51,6 @@ export function rootReducer(state = initialState, action) {
         case UPDATE_STREAM_VOLUMES:
             state.incomingStreams.forEach(stream => {
                 if (stream.id == action.payload.id) {
-                    console.log(stream, action.payload.volume)
                     stream.setVolume(action.payload.volume)
                 }
             })

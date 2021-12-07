@@ -50,7 +50,6 @@ export const locationServiceMiddleware = store => next => action => {
             break
         case ADJUST_PEER_VOLUME:
             vol = determineVolumePercentage(store.getState().currentLocation, action.payload.location)
-            console.log("Location", action.payload.location)
             dispatch({
                 type: UPDATE_STREAM_VOLUMES,
                 payload: {
@@ -58,8 +57,6 @@ export const locationServiceMiddleware = store => next => action => {
                     volume: vol
                 }
             })
-
-            
             break
         case STOP_LOCATION_SERVICE:
             Geolocation.clearWatch(geoWatchId)

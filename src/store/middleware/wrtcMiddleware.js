@@ -20,20 +20,12 @@ export const webrtcMiddleware = store => next => action => {
     const { dispatch } = store
     switch (action.type) {
         case CLIENT_RESET:
+            // Reset state that has to do with peer connection
             if (peerConnection) peerConnection.close()
-            peerConnection = null
-            next(action)
-            break
-        case WRTC_MUTE:
-            localStream = store.getState().localStream
-            if (localStream) {
-                localStream.getAudioTracks()[0].enabled = localStream.getAudioTracks()[0].enabled ? false : true
-            }
             next(action)
             break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
-            peerConnection = null
             dispatch({
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED
@@ -44,9 +36,14 @@ export const webrtcMiddleware = store => next => action => {
                     event: WRTC_DISCONNECT
                 }
             })
-            dispatch({
-                type: WRTC_DISCONNECTED
-            })
+            next(action)
+            break
+        case WRTC_MUTE:
+            localStream = store.getState().localStream
+            if (localStream) {
+                localStream.getAudioTracks()[0].enabled = localStream.getAudioTracks()[0].enabled ? false : true
+            }
+            next(action)
             break
         case WRTC_ANSWER:
             rdesc = new RTCSessionDescription(JSON.parse(action.payload))

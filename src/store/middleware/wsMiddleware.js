@@ -87,7 +87,7 @@ export const websocketMiddleware = store => next => action => {
                 ws = null
                 if (ws) {
                     dispatch({
-                        type: WRTC_DISCONNECT
+                        type: CLIENT_RESET
                     })
                 }
                 dispatch({
@@ -111,7 +111,7 @@ export const websocketMiddleware = store => next => action => {
 
         case WS_SEND_MESSAGE:
             let payload = JSON.stringify(action.payload)
-            // console.log("Sent:", action.payload.event)
+            console.log("Sent:", action.payload.event)
             ws.send(payload)
             break
 

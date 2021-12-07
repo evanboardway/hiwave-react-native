@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { connect } from 'react-redux';
-
-const IMAGE_PIGGY = require("../assets/images/piggy.png")
+import { AvatarToImage } from '../helpers/avatars';
 
 
 MapboxGL.setAccessToken('pk.eyJ1IjoidGVzc29yby0iLCJhIjoiY2t1b3EzY2d2MGV1ejJ2bzFtbXIxMmdjbCJ9.P-4uyej3lnQVxNs1Tzc-Sw');
@@ -36,7 +35,7 @@ const MapView = (props) => {
             coordinate={[peerLocation.location.Longitude, peerLocation.location.Latitude]}>
             <View style={styles.iconWrapper}>
               <Image
-                source={IMAGE_PIGGY}
+                source={AvatarToImage("random")}
                 style={styles.icon}
               />
             </View>

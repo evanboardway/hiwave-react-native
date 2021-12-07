@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Text, View, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { UPDATE_AVATAR, AVATAR_MOPED, AVATAR_PIGGY, WS_SEND_MESSAGE, WRTC_CONNECTING, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
+import { UPDATE_AVATAR, AVATAR_SCOOTER, AVATAR_MOPED, AVATAR_PIGGY, WS_SEND_MESSAGE, WRTC_CONNECTING, WRTC_CONNECTED, WRTC_DISCONNECT, WRTC_CONNECT, WRTC_MUTE, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN } from '../helpers/enums';
 import { OVERLAY_1, OVERLAY_2, BUTTON_ACCENT, DARK_THEME, MAPBOX_THEME, CONTROLS_THEME, CONTROLS_BUTTON, RED_ACCENT } from '../assets/themes';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import * as Avatars from '../helpers/avatars'

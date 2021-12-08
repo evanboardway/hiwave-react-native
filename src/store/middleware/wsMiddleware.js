@@ -12,6 +12,7 @@ export const websocketMiddleware = store => next => action => {
         case WSCONNECT:
             // socket = new WebSocket("ws://192.168.4.25:5000/websocket")
             socket = new WebSocket("ws://localhost:5000/websocket")
+            
 
             socket.onopen = () => {
                 clearTimeout(connectionInterval)
@@ -20,7 +21,7 @@ export const websocketMiddleware = store => next => action => {
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTED
                 })
-                store.dispatch({
+                dispatch({
                     type: START_LOCATION_SERVICE
                 })
             }
@@ -28,6 +29,7 @@ export const websocketMiddleware = store => next => action => {
             socket.onmessage = (e) => {
                 message = JSON.parse(e.data)
                 console.log("RECEIVED: ", message.event)
+
                 // dispatch accordingly
                 switch (message.event) {
                     case WRTC_ANSWER:
@@ -112,7 +114,7 @@ export const websocketMiddleware = store => next => action => {
         case WS_SEND_MESSAGE:
             let payload = JSON.stringify(action.payload)
             console.log("Sent:", action.payload.event)
-            ws.send(payload)
+            if (ws) { ws.send(payload) }
             break
 
         default:

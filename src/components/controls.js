@@ -7,7 +7,7 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import * as Avatars from '../helpers/avatars'
 
 
-function RenderSelectableAvatar (props) {
+function RenderSelectableAvatar(props) {
     if (props.selectableAvatarMenuHidden) {
         return null
     } else {
@@ -94,12 +94,12 @@ function RenderSelectableAvatar (props) {
 }
 
 const ControlsView = (props) => {
+
     let title
-    let disabled = false
+
     switch (props.wrtcConnectionState) {
         case WRTC_CONNECTING:
             title = "CONNECTING"
-            disabled = true
             break
         case WRTC_CONNECTED:
             title = "DISCONNECT"
@@ -108,10 +108,13 @@ const ControlsView = (props) => {
             title = "CONNECT"
             break
     }
+
+    console.log("Controls rerendered with state", title)
+
     return (
         <View style={styles.navigationContainer}>
 
-            <RenderSelectableAvatar selectableAvatarMenuHidden={props.selectableAvatarMenuHidden} dispatch={props.dispatch}/>
+            <RenderSelectableAvatar selectableAvatarMenuHidden={props.selectableAvatarMenuHidden} dispatch={props.dispatch} />
 
             <View style={styles.controlsContainer}>
 
@@ -129,7 +132,7 @@ const ControlsView = (props) => {
                 <View style={styles.iconBacking}>
                     <TouchableOpacity
                         onPress={() => {
-                            if (props.wrtcConnectionState == WRTC_CONNECTED) {
+                            if (props.wrtcConnectionState == WRTC_CONNECTED || props.wrtcConnectionState == WRTC_CONNECTING) {
                                 props.dispatch({
                                     type: WRTC_DISCONNECT
                                 })
@@ -138,8 +141,7 @@ const ControlsView = (props) => {
                                     type: WRTC_CONNECT
                                 })
                             }
-                        }}
-                        disabled={disabled}>
+                        }}>
                         <View style={styles.connectButtonContainer}>
                             <Image style={styles.image} source={title == 'CONNECT' ? require('../assets/images/connect.png') : require('../assets/images/disconnect.png')} />
                         </View>

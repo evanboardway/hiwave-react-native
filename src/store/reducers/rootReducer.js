@@ -38,7 +38,8 @@ export function rootReducer(state = initialState, action) {
 
             locations.push({
                 id: action.payload.UUID,
-                location: action.payload.Location
+                location: action.payload.Location,
+                avatar: action.payload.Avatar
             })
             return {...state, peerLocations: locations}
         case WRTC_SET_LOCAL_STREAM:

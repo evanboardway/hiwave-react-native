@@ -109,8 +109,6 @@ const ControlsView = (props) => {
             break
     }
 
-    console.log("Controls rerendered with state", title)
-
     return (
         <View style={styles.navigationContainer}>
 

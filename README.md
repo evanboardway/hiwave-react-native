@@ -31,3 +31,6 @@
 
 ![Hiwave_Poster](https://user-images.githubusercontent.com/47399926/144283271-09de2583-b5b2-4cee-bd72-f380adc9dc46.png)
 
+## Final Presentation Lightning Slides
+
+[Hiwave_capstone_presentation.pdf](https://github.com/evanboardway/hiwave-react-native/files/7700060/Hiwave_capstone_presentation.pdf)

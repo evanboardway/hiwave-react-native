@@ -1,4 +1,4 @@
-import { CURRENT_AVATAR, SET_CURRENT_AVATAR, UPDATE_AVATAR } from "../../helpers/enums"
+import { CURRENT_AVATAR, SET_CURRENT_AVATAR, UPDATE_AVATAR, WS_SEND_MESSAGE } from "../../helpers/enums"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storeData = async (value) => {
@@ -42,10 +42,19 @@ export const avatarMiddleware = store => next => action => {
             })
             break
         case CURRENT_AVATAR:
-            getData().then(avatar => dispatch({
-                type: SET_CURRENT_AVATAR,
-                payload: avatar
-            }))
+            getData().then(avatar => {
+                dispatch({
+                    type: SET_CURRENT_AVATAR,
+                    payload: avatar
+                })
+                dispatch({
+                    type: WS_SEND_MESSAGE,
+                    payload: {
+                        event: SET_CURRENT_AVATAR,
+                        data: avatar
+                    }
+                })
+            })
             break
         default:
             next(action)

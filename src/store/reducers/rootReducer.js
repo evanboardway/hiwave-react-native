@@ -1,4 +1,4 @@
-import { ORIENTATION_CHANGE, WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_PEER_LOCATION, UPDATE_WSCONNECTIONSTATE, WRTC_REMOVE_STREAM, WRTC_DISCONNECTED, UPDATE_WRTC_CONNECTION_STATE, WRTC_UPDATE_CONNECTION_STATE, UPDATE_LOCATION, WRTC_ADD_STREAM, UPDATE_STREAM_VOLUMES, CLIENT_RESET, WRTC_SET_LOCAL_STREAM, WRTC_MUTE, SELECTABLE_AVATAR_MENU_HIDDEN, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN, AVATAR_BIKE, SET_CURRENT_AVATAR, WRTC_DISCONNECT } from "../../helpers/enums"
+import { ORIENTATION_CHANGE, WSCONNECTED, WSCONNECTING, WSCONNECT, UPDATE_PEER_LOCATION, UPDATE_WSCONNECTIONSTATE, WRTC_REMOVE_STREAM, WRTC_DISCONNECTED, UPDATE_WRTC_CONNECTION_STATE, WRTC_UPDATE_CONNECTION_STATE, UPDATE_LOCATION, WRTC_ADD_STREAM, UPDATE_STREAM_VOLUMES, CLIENT_RESET, WRTC_SET_LOCAL_STREAM, WRTC_MUTE, SELECTABLE_AVATAR_MENU_HIDDEN, TOGGLE_SELECTABLE_AVATAR_MENU_HIDDEN, AVATAR_BIKE, SET_CURRENT_AVATAR, WRTC_DISCONNECT, PEER_DISCONNECTED } from "../../helpers/enums"
 
 const initialState = {
     orientation: 'portrait',
@@ -29,12 +29,17 @@ export function rootReducer(state = initialState, action) {
             return { ...state, wrtcConnectionState: action.payload }
         case UPDATE_LOCATION:
             return { ...state, currentLocation: action.payload }
+        case PEER_DISCONNECTED:
+            console.log("peer disconnected", action.payload)
+            locations = state.peerLocations.filter(location => location.id != action.payload)
+            return {...state, peerLocations: locations}
         case UPDATE_PEER_LOCATION:
             locations = state.peerLocations.filter(location => location.id != action.payload.UUID)
 
             locations.push({
                 id: action.payload.UUID,
-                location: action.payload.Location
+                location: action.payload.Location,
+                avatar: action.payload.Avatar
             })
             return {...state, peerLocations: locations}
         case WRTC_SET_LOCAL_STREAM:
@@ -44,14 +49,12 @@ export function rootReducer(state = initialState, action) {
             return state
         case WRTC_REMOVE_STREAM:
             streams = state.incomingStreams.filter(stream => stream.id != action.payload)
-            locations = state.peerLocations.filter(location => location.id != action.payload)
-            return { ...state, incomingStreams: streams, peerLocations: locations }
+            return { ...state, incomingStreams: streams }
         case WRTC_DISCONNECT:
             return { ...state, incomingStreams: new Array(), peerLocations: new Array(), localStream: null, muted: false,  }
         case UPDATE_STREAM_VOLUMES:
             state.incomingStreams.forEach(stream => {
                 if (stream.id == action.payload.id) {
-                    console.log(stream, action.payload.volume)
                     stream.setVolume(action.payload.volume)
                 }
             })

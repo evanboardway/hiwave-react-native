@@ -35,7 +35,7 @@ const MapView = (props) => {
             coordinate={[peerLocation.location.Longitude, peerLocation.location.Latitude]}>
             <View style={styles.iconWrapper}>
               <Image
-                source={AvatarToImage("random")}
+                source={AvatarToImage(peerLocation.avatar)}
                 style={styles.icon}
               />
             </View>

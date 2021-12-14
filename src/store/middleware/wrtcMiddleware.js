@@ -7,7 +7,7 @@ import {
 } from 'react-native-webrtc'
 
 
-let peerConnection
+var peerConnection
 
 const configuration = {
     iceServers: [
@@ -19,6 +19,10 @@ const configuration = {
 export const webrtcMiddleware = store => next => action => {
     const { dispatch } = store
     switch (action.type) {
+        case "test":
+            console.log("TRIGGERED PC", peerConnection)
+            next(action)
+            break
         case CLIENT_RESET:
             // Reset state that has to do with peer connection
             if (peerConnection) peerConnection.close()
@@ -26,6 +30,7 @@ export const webrtcMiddleware = store => next => action => {
             break
         case WRTC_DISCONNECT:
             if (peerConnection) peerConnection.close()
+            // peerConnection = null
             dispatch({
                 type: WRTC_UPDATE_CONNECTION_STATE,
                 payload: WRTC_DISCONNECTED

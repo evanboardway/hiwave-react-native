@@ -1,4 +1,4 @@
-import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, ADJUST_PEER_VOLUME, WRTC_CANDIDATAE, WRTC_FAILED, CLIENT_RESET, WRTC_REMOVE_STREAM } from "../../helpers/enums";
+import { WSCONNECTED, START_LOCATION_SERVICE, UPDATE_PEER_LOCATION, WSCONNECT, UPDATE_WSCONNECTIONSTATE, WSCONNECTING, WSFAILED, WS_SEND_MESSAGE, WRTC_OFFER, WRTC_ANSWER, WRTC_ICE_CANDIDATE, WRTC_DISCONNECT, WRTC_RENEGOTIATION, WRTC_RENEGOTIATION_NEEDED, WRTC_RENEGOTIATE, STOP_LOCATION_SERVICE, PEER_LOCATION, ADJUST_PEER_VOLUME, WRTC_CANDIDATAE, WRTC_FAILED, CLIENT_RESET, WRTC_REMOVE_STREAM, PEER_DISCONNECTED } from "../../helpers/enums";
 
 let ws = null
 let timeout = 2500
@@ -13,6 +13,7 @@ export const websocketMiddleware = store => next => action => {
             // socket = new WebSocket("ws://192.168.4.25:5000/websocket")
             socket = new WebSocket("ws://localhost:5000/websocket")
 
+
             socket.onopen = () => {
                 clearTimeout(connectionInterval)
                 ws = socket
@@ -20,7 +21,7 @@ export const websocketMiddleware = store => next => action => {
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTED
                 })
-                store.dispatch({
+                dispatch({
                     type: START_LOCATION_SERVICE
                 })
             }
@@ -28,6 +29,7 @@ export const websocketMiddleware = store => next => action => {
             socket.onmessage = (e) => {
                 message = JSON.parse(e.data)
                 console.log("RECEIVED: ", message.event)
+
                 // dispatch accordingly
                 switch (message.event) {
                     case WRTC_ANSWER:
@@ -70,6 +72,12 @@ export const websocketMiddleware = store => next => action => {
                         dispatch({
                             type: CLIENT_RESET
                         })
+                        break
+                    case PEER_DISCONNECTED:
+                        dispatch({
+                            type: PEER_DISCONNECTED,
+                            payload: message.data
+                        })
                     default:
                         console.log("Caught unrecognized message: ", message.data)
                 }
@@ -85,11 +93,10 @@ export const websocketMiddleware = store => next => action => {
 
             socket.onclose = () => {
                 ws = null
-                if (ws) {
-                    dispatch({
-                        type: CLIENT_RESET
-                    })
-                }
+                dispatch({
+                    type: CLIENT_RESET
+                })
+
                 dispatch({
                     type: UPDATE_WSCONNECTIONSTATE,
                     payload: WSCONNECTING
@@ -112,7 +119,7 @@ export const websocketMiddleware = store => next => action => {
         case WS_SEND_MESSAGE:
             let payload = JSON.stringify(action.payload)
             console.log("Sent:", action.payload.event)
-            ws.send(payload)
+            if (ws) { ws.send(payload) }
             break
 
         default:

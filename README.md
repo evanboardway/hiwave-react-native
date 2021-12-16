@@ -32,9 +32,13 @@
 
 ## Final Presentation Lightning Slides
 
-[Hiwave_capstone_presentation.pdf](https://github.com/evanboardway/hiwave-react-native/files/7700060/Hiwave_capstone_presentation.pdf)
+* [Hiwave_capstone_presentation.pdf](https://github.com/evanboardway/hiwave-react-native/files/7700060/Hiwave_capstone_presentation.pdf)
 
 ## Final Report
 
-[Hiwave Final Report.pdf](https://github.com/evanboardway/hiwave-react-native/files/7729836/Hiwave.Final.Report.pdf)
+* [Hiwave Final Report.pdf](https://github.com/evanboardway/hiwave-react-native/files/7729836/Hiwave.Final.Report.pdf)
+
+## Final Demo Video
+
+* https://drive.google.com/file/d/1ZHghXfx3dXRTYzDO3nwegNposfLhZOLv/view?usp=sharing
 

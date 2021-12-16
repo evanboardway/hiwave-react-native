@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { ORIENTATION_CHANGE, WSCONNECTING, WSFAILED } from '../helpers/enums'
 import MapView from './map';
@@ -25,6 +25,7 @@ const HomeWrapper = (props) => {
     switch (props.wsConnectionState) {
         case WSCONNECTING:
             return (<View style={styles.container}>
+                <Image source={require('../assets/HW_Transparent.png')} />
                 <Text>Connecting...</Text>
             </View>)
         case WSFAILED:

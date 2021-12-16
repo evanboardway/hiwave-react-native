@@ -52,3 +52,5 @@ export const AVATAR_PIGGY = "piggy.png"
 
 
 
+export const MUTED = "muted"
+export const UNMUTED = "unmuted"

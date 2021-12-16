@@ -17,13 +17,14 @@ export default function App() {
     <Provider store={store}>
       <HomeWrapper></HomeWrapper>
     </Provider>
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#9834eb',
     alignItems: 'center',
     justifyContent: 'center',
   },
